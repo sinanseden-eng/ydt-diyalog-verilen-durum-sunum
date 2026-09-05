@@ -1,0 +1,10 @@
+YDT Diyalog ve Durum Sunumu - Teknik düzeltme paketi
+
+1. ZIP dosyasını açın.
+2. Paketteki index.html dosyasını mevcut GitHub deponuzdaki index.html dosyasının yerine yükleyin.
+3. Değişikliği kaydedin. GitHub'a bağlı otomatik yayınınız varsa yayın sürecinin tamamlanmasını bekleyin.
+4. Sayfayı Ctrl+F5 ile yenileyin. Tarayıcı verilerini silmeniz gerekmez.
+
+SORU-KARSILASTIRMASI.md: Kitaptaki 204 sorunun bölüm ve sayfa dökümü, mevcut 24 soruyla karşılaştırma, teknik düzeltmeler ve test sınırları.
+
+Bu paket teknik hataları düzeltir. Kitaptaki soru metinlerinin toplu aktarımını içermez.

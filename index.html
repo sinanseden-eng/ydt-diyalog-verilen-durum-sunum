@@ -228,7 +228,12 @@ section{padding:64px 0 20px}
 .stem.umark{background:var(--umark);box-shadow:.28em 0 0 var(--umark),-.28em 0 0 var(--umark)}
 .stem .kw{font-style:normal;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;text-decoration:underline;text-decoration-color:var(--c);text-decoration-thickness:2.5px;text-underline-offset:4px}
 .opts{display:flex;flex-direction:column;gap:8px}
-.opt{display:grid;grid-template-columns:34px 1fr 26px 30px;align-items:start;gap:12px;padding:10px 12px;border:1.5px solid var(--line);background:var(--paper);cursor:pointer;font-family:inherit;font-size:.95rem;text-align:left;width:100%;color:var(--ink);transition:border-color .12s,background .12s}
+.opt{display:grid;grid-template-columns:minmax(0,1fr) 30px;align-items:start;gap:12px;padding:10px 12px;border:1.5px solid var(--line);background:var(--paper);font-family:inherit;font-size:.95rem;text-align:left;width:100%;color:var(--ink);transition:border-color .12s,background .12s}
+.choice{display:grid;grid-template-columns:34px minmax(0,1fr) 26px;align-items:start;gap:12px;width:100%;border:0;padding:0;background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.choice[aria-disabled="true"]{cursor:default}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid #23608F;outline-offset:3px}
+section{scroll-margin-top:72px}
+.save-status{color:var(--bad);border:2px solid var(--bad);padding:12px 16px;margin-bottom:20px;font-size:.9rem}
 .qcard:not(.answered) .opt:hover,.sq:not(.answered) .opt:hover{border-color:var(--ink);background:var(--paper2)}
 .opt .key{font-weight:800;border:1.5px solid var(--ink);width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.8rem;background:var(--card);flex:none}
 .opt .mk{display:flex;justify-content:center;align-items:center;color:transparent}
@@ -420,6 +425,19 @@ footer .fl{font-family:'Newsreader',serif;font-style:italic}
   .ws-cover,.ws-pas,.ws-partb,.ws-key{padding-left:18px;padding-right:18px}
   .ws-kgrid{grid-template-columns:repeat(3,1fr)}
 }
+@media screen and (max-width:640px){
+  .topbar .wrap{height:auto;flex-direction:column;align-items:stretch;gap:5px;padding-top:8px;padding-bottom:8px}
+  .brand{font-size:.75rem}
+  .brand .sub{display:none}
+  .topnav{width:100%;min-width:0}
+  section{scroll-margin-top:110px}
+  .modalmod{padding:16px;overflow-x:auto}
+  #fnlab .lab{padding:16px}
+  .rootcard{padding:18px}
+  .choice{grid-template-columns:26px minmax(0,1fr) 18px;gap:8px;overflow-wrap:anywhere}
+  .opt{gap:6px;padding:10px 8px}
+  .confirmbox{flex-wrap:wrap}
+}
 </style>
 </head>
 <body id="top">
@@ -604,8 +622,9 @@ footer .fl{font-family:'Newsreader',serif;font-style:italic}
     <div class="sec-head">
       <span class="no">§04</span>
       <h2>Karne</h2>
-      <p class="d">İlerlemeniz bu tarayıcıda saklanır (localStorage) — sayfayı kapatıp geri dönseniz bile kaybolmaz.</p>
+      <p class="d">Cevaplarınız ve işaretleriniz bu tarayıcıda saklanır. Tarayıcı verilerini silerseniz kayıtlar da silinir.</p>
     </div>
+    <p id="saveStatus" class="save-status" role="status" aria-live="polite" hidden></p>
     <div class="bignum-row">
       <div class="bignum"><b id="rDone">0</b><span>Çözülen / 24</span></div>
       <div class="bignum"><b id="rRight" style="color:var(--ok)">0</b><span>Doğru</span></div>
@@ -829,10 +848,10 @@ window.FUNCS={
 window.FNITEMS=[
   {en:'I\u2019m terribly sorry \u2014 I completely forgot about our meeting. Shall we reschedule?',tr:'Toplantımızı tamamen unuttum; yeniden ayarlasak nasıl olur?',fn:'ap',note:'"I\u2019m terribly sorry" + "forgot" = özür; "Shall we reschedule?" telafi önerisi \u2014 özür+telafi paketi.'},
   {en:'That sounds lovely, but I\u2019m afraid I\u2019m working that night.',tr:'Çok isterim ama o akşam çalışıyorum.',fn:'rf',note:'"but I\u2019m afraid" + somut sebep = nazik red; "That sounds lovely" yumuşatıcı ön-beğeni.'},
-  {en:'Would you mind closing the window? It\u2019s a bit drafty in here.',tr:'Pencereyi kapatır mısın? Burası biraz havalı.',fn:'rq',note:'"Would you mind + -ing" en kibar rica kalıplarından; "a bit" hafifletici.'},
+  {en:'Would you mind closing the window? It\u2019s a bit drafty in here.',tr:'Pencereyi kapatır mısın? Burada biraz cereyan var.',fn:'rq',note:'"Would you mind + -ing" en kibar rica kalıplarından; "a bit" hafifletici.'},
   {en:'Those boxes look heavy \u2014 shall I take a couple of them for you?',tr:'O kutular ağır görünüyor; birkaçını senin için taşıyabilir miyim?',fn:'of',note:'"Shall I\u2026?" gönüllü teklif; gözlem cümlesi teklifi doğallaştırır, reddetme hakkı açık bırakır.'},
   {en:'Why don\u2019t we try the new place on the corner for lunch?',tr:'Öğle yemeği için köşedeki yeni mekânı denesek?',fn:'sg',note:'"Why don\u2019t we\u2026?" öneri kalıbı; somut öneri nesnesi (new place) öneriyi gerçek kılar.'},
-  {en:'We\u2019re having a little get-together on Friday \u2014 are you free?',tr:'Cuma küçük bir toplantı düzenliyoruz; mısait misin?',fn:'inv',note:'Davet + uygunluk sorgusu; "get-together" günlük kayıtlı davet sözcüğü.'},
+  {en:'We\u2019re having a little get-together on Friday \u2014 are you free?',tr:'Cuma küçük bir toplantı düzenliyoruz; müsait misin?',fn:'inv',note:'Davet + uygunluk sorgusu; "get-together" günlük kayıtlı davet sözcüğü.'},
   {en:'I wouldn\u2019t touch that rail if I were you \u2014 the paint hasn\u2019t dried.',tr:'O korkuluğa dokunmazdım \u2014 boya kurumadı.',fn:'wr',note:'"I wouldn\u2019t\u2026 if I were you" klasik uyarı kalıbı + somut gerekçe.'},
   {en:'Congratulations! I always knew you\u2019d win that scholarship.',tr:'Tebrikler! Bursu kazanacağını baştan biliyordum.',fn:'sup',note:'"Congratulations" + geçmişe dönük güven ("I always knew") = samimi tebrik.'},
   {en:'I\u2019m so sorry to hear about your grandmother \u2014 how are you holding up?',tr:'Büyükannen için çok üzüldüm; dayanabiliyor musun?',fn:'sup',note:'"Sorry to hear" baş sağlığı; "how are you holding up" dayanma sorusu = destek.'},
@@ -1307,12 +1326,69 @@ var QUESTIONS=window.QUESTIONS||[];
 var SENT={};
 
 var KEY='ydt-dialog-lab-v1';
-var state={ans:{},marks:{},wskey:false,sim:{score:0,streak:0,best:0,idx:0}};
+function record(v){return !!v&&typeof v==='object'&&!Array.isArray(v);}
+function count(v){return typeof v==='number'&&Number.isSafeInteger(v)&&v>=0?v:0;}
+function signature(value){
+  var str=JSON.stringify(value),hash=2166136261;
+  for(var i=0;i<str.length;i++){hash=Math.imul(hash^str.charCodeAt(i),16777619);}
+  return (hash>>>0).toString(16);
+}
+var questionSet=signature([QUESTIONS.map(function(q){return [q.id,q.stem,(q.opts||[]).map(function(o){return o[0];}),q.ans,q.facts];}),DLGS]);
+var functionSet=signature(FNITEMS);
+var state={version:2,questionSet:questionSet,functionSet:functionSet,ans:{},marks:{},wskey:false,sim:{score:0,streak:0,best:0,idx:0,order:[],picked:null}};
+var validMarks=Object.create(null);
+QUESTIONS.forEach(function(q){
+  validMarks[q.id+'#stem']=true;
+  (q.opts||[]).forEach(function(_,i){validMarks[q.id+'#o'+i]=true;});
+  (q.facts||[]).forEach(function(_,i){validMarks['s'+q.id+'-f'+i]=true;});
+});
+DLGS.forEach(function(d,di){(d.lines||[]).forEach(function(_,li){validMarks['d'+di+'-l'+li]=true;});});
+var storageReadFailed=false;
 try{
   var raw=localStorage.getItem(KEY);
-  if(raw){var s=JSON.parse(raw);state.ans=s.ans||{};state.marks=s.marks||{};state.wskey=!!s.wskey;var sm=s.sim||{};state.sim.score=sm.score||0;state.sim.streak=sm.streak||0;state.sim.best=sm.best||0;state.sim.idx=sm.idx||0;}
-}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+  if(raw){
+    var s=JSON.parse(raw);
+    if(record(s)){
+      if(!s.questionSet||s.questionSet===questionSet){
+        if(record(s.ans))QUESTIONS.forEach(function(q){
+          var picked=s.ans[q.id];
+          if(Number.isInteger(picked)&&picked>=0&&picked<(q.opts||[]).length)state.ans[q.id]=picked;
+        });
+        if(record(s.marks))Object.keys(s.marks).forEach(function(k){if(validMarks[k]&&s.marks[k]===1)state.marks[k]=1;});
+      }
+      state.wskey=s.wskey===true;
+      var sm=record(s.sim)?s.sim:{};
+      if(!s.functionSet||s.functionSet===functionSet){
+        state.sim.score=count(sm.score);
+        state.sim.streak=Math.min(count(sm.streak),state.sim.score);
+        state.sim.best=Math.min(Math.max(count(sm.best),state.sim.streak),state.sim.score);
+        var order=sm.order;
+        if(s.functionSet===functionSet&&Array.isArray(order)&&order.length===FNITEMS.length&&order.length>0&&
+           order.every(function(n){return Number.isInteger(n)&&n>=0&&n<FNITEMS.length;})&&new Set(order).size===order.length){
+          state.sim.order=order.slice();
+          state.sim.idx=count(sm.idx)%order.length;
+          if(sm.idx===count(sm.idx)&&typeof sm.picked==='string'&&Object.prototype.hasOwnProperty.call(FUNCS,sm.picked))state.sim.picked=sm.picked;
+        }
+      }
+    }
+  }
+}catch(e){storageReadFailed=!(e instanceof SyntaxError);}
+function save(){
+  var status=document.getElementById('saveStatus');
+  if(!QUESTIONS.length||!FNITEMS.length||!DLGS.length||!Object.keys(CATS).length||!Object.keys(FUNCS).length){
+    if(status){status.hidden=false;status.textContent='İçerik tam yüklenemediği için önceki ilerlemenizin üzerine yazılmıyor.';}
+    return false;
+  }
+  try{
+    localStorage.setItem(KEY,JSON.stringify(state));
+    if(status){status.textContent=storageReadFailed?'Önceki ilerleme okunamadı. Bu oturumdaki cevaplar kaydediliyor.':'';status.hidden=!storageReadFailed;}
+    return true;
+  }catch(e){
+    if(status){status.hidden=false;status.textContent='İlerlemeniz kaydedilemiyor. Sayfayı kapatırsanız veya yenilerseniz bu oturumdaki değişiklikler kaybolabilir.';}
+    return false;
+  }
+}
+save();
 
 /* ── 1. Veri doğrulama (kendi sorununuzu eklerken de devrede) ── */
 (function(){
@@ -1398,7 +1474,8 @@ safe('\u0130\u015flev Lab',function(){
     return;
   }
   function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
-  simOrder=shuffle(FNITEMS.map(function(_,i){return i;}));
+  simOrder=state.sim.order.length?state.sim.order.slice():shuffle(FNITEMS.map(function(_,i){return i;}));
+  state.sim.order=simOrder.slice();
   Object.keys(FUNCS).forEach(function(k){
     var f=FUNCS[k];
     var btn=el('button','catb',f.name);btn.style.setProperty('--c',f.color);btn.setAttribute('data-fn',k);
@@ -1406,8 +1483,8 @@ safe('\u0130\u015flev Lab',function(){
     b.appendChild(btn);
   });
   var nx=document.getElementById('simNext');if(nx)nx.addEventListener('click',simNext);
-  if(state.sim.idx>=simOrder.length)state.sim.idx=0;
-  renderSimStats();renderRoot();
+  state.sim.idx=state.sim.idx%simOrder.length;
+  save();renderSimStats();renderRoot();
   function renderRoot(){
     var i=state.sim.idx%simOrder.length;
     var r=FNITEMS[simOrder[i]];
@@ -1416,24 +1493,36 @@ safe('\u0130\u015flev Lab',function(){
     document.getElementById('simTr').textContent='TR: '+r.tr;
     Array.prototype.forEach.call(document.querySelectorAll('.catb'),function(x){x.classList.remove('wasright','waswrong');x.disabled=false;});
     var f=document.getElementById('simFb');if(f)f.classList.remove('show');
+    if(state.sim.picked!==null)renderSimAnswer(state.sim.picked);
   }
   function simAnswer(k,btn){
-    var f=document.getElementById('simFb');
-    if(f&&f.classList.contains('show'))return;
+    if(state.sim.picked!==null)return;
     var r=FNITEMS[simOrder[state.sim.idx%simOrder.length]];
     var ok=(k===r.fn);
-    Array.prototype.forEach.call(document.querySelectorAll('.catb'),function(x){x.disabled=true;if(x.getAttribute('data-fn')===r.fn)x.classList.add('wasright');});
-    if(!ok)btn.classList.add('waswrong');
+    state.sim.picked=k;
     if(ok){state.sim.score++;state.sim.streak++;state.sim.best=Math.max(state.sim.best,state.sim.streak);}else{state.sim.streak=0;}
-    save();renderSimStats();
+    save();renderSimStats();renderSimAnswer(k);
+  }
+  function renderSimAnswer(k){
+    var f=document.getElementById('simFb');
+    var r=FNITEMS[simOrder[state.sim.idx]];
+    var ok=(k===r.fn);
+    Array.prototype.forEach.call(document.querySelectorAll('.catb'),function(x){
+      var fn=x.getAttribute('data-fn');
+      x.disabled=true;
+      if(fn===r.fn)x.classList.add('wasright');
+      if(!ok&&fn===k)x.classList.add('waswrong');
+    });
     var v=document.getElementById('simVerdict');
-    if(v){v.textContent=ok?'\u00d0o\u011fru te\u015fhis \u2014 '+FUNCS[r.fn].name:'Yanl\u0131\u015f \u2014 bu ifade '+FUNCS[r.fn].name+' i\u015flevini ta\u015f\u0131yordu';v.className='verdict '+(ok?'ok':'no');}
+    if(v){v.textContent=ok?'Doğru te\u015fhis \u2014 '+FUNCS[r.fn].name:'Yanl\u0131\u015f \u2014 bu ifade '+FUNCS[r.fn].name+' i\u015flevini ta\u015f\u0131yordu';v.className='verdict '+(ok?'ok':'no');}
     var nt=document.getElementById('simNote');if(nt)nt.innerHTML=r.note;
     if(f)f.classList.add('show');
   }
   function simNext(){
-    state.sim.idx++;
-    if(state.sim.idx%simOrder.length===0){simOrder=shuffle(simOrder);toast('\u0130fade destesi yeniden kar\u0131\u015ft\u0131r\u0131ld\u0131');}
+    state.sim.idx=(state.sim.idx+1)%simOrder.length;
+    state.sim.picked=null;
+    if(state.sim.idx===0){simOrder=shuffle(simOrder);toast('\u0130fade destesi yeniden kar\u0131\u015ft\u0131r\u0131ld\u0131');}
+    state.sim.order=simOrder.slice();
     save();renderRoot();
   }
   function renderSimStats(){
@@ -1445,11 +1534,11 @@ safe('\u0130\u015flev Lab',function(){
 
 /* ── 4. Mavi işaretler ──────────────────────────────────── */
 function markNode(key){return document.getElementById(key)||document.querySelector('[data-mk="'+key+'"]');}
-function applyMarkNode(key){var n=markNode(key);if(n){n.classList.add('umark');var p=n.querySelector('.pen');if(p)p.classList.add('on');}}
+function applyMarkNode(key){var n=markNode(key);if(n){n.classList.add('umark');var p=n.querySelector('.pen');if(p){p.classList.add('on');p.setAttribute('aria-pressed','true');}}}
 function toggleMark(key,node,pi){
   if(state.marks[key])delete state.marks[key];else state.marks[key]=1;
   node.classList.toggle('umark',!!state.marks[key]);
-  var p=node.querySelector('.pen');if(p)p.classList.toggle('on',!!state.marks[key]);
+  var p=node.querySelector('.pen');if(p){p.classList.toggle('on',!!state.marks[key]);p.setAttribute('aria-pressed',String(!!state.marks[key]));}
   save();if(pi!==null&&pi!==undefined&&DLGS[pi])updateTabs(pi);
 }
 function updateTabs(pi){
@@ -1482,6 +1571,26 @@ safe('Deneme',function(){
     card.classList.add('flash');
     setTimeout(function(){card.classList.remove('flash');},1400);
   }
+  function buildOptions(q){
+    var opts=el('div','opts');
+    opts.setAttribute('role','group');
+    opts.setAttribute('aria-label','Soru '+q.id+' cevap seçenekleri');
+    q.opts.forEach(function(o,i){
+      var d=el('div','opt');d.setAttribute('data-mk',q.id+'#o'+i);
+      var choice=el('button','choice');choice.type='button';
+      choice.setAttribute('aria-pressed','false');
+      choice.innerHTML='<span class="key">'+'ABCDE'[i]+'</span><span>'+esc(o[0])+'</span><span class="mk" aria-hidden="true"></span>';
+      choice.addEventListener('click',function(){pick(q,i);});
+      var pen=el('button','pen');pen.type='button';
+      pen.title='Şıkkı işaretle / kaldır';
+      pen.setAttribute('aria-label','Soru '+q.id+', '+'ABCDE'[i]+' şıkkını işaretle / kaldır');
+      pen.setAttribute('aria-pressed','false');
+      pen.innerHTML='<svg class="ic" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M17 3l4 4L8 20l-5 1 1-5L17 3z"/></svg>';
+      pen.addEventListener('click',function(){toggleMark(q.id+'#o'+i,d,null);});
+      d.appendChild(choice);d.appendChild(pen);opts.appendChild(d);
+    });
+    return opts;
+  }
   function buildQ(q){
     var c=CATS[q.cat]||{name:'?',color:'#333'};
     var card=el('div','qcard');card.style.setProperty('--c',c.color);card.id='q'+q.id;
@@ -1490,14 +1599,7 @@ safe('Deneme',function(){
     var stem=el('p','stem',q.stem);
     stem.setAttribute('data-mk',q.id+'#stem');stem.title='T\u0131klay\u0131p bu sat\u0131r\u0131 i\u015faretle';
     stem.addEventListener('click',function(){toggleMark(q.id+'#stem',stem,null);});
-    var opts=el('div','opts');
-    q.opts.forEach(function(o,i){
-      var d=el('div','opt');d.setAttribute('data-mk',q.id+'#o'+i);
-      d.innerHTML='<span class="key">'+'ABCDE'[i]+'</span><span>'+esc(o[0])+'</span><span class="mk"></span><button class="pen" title="\u015e\u0131kk\u0131 i\u015faretle / kald\u0131r"><svg class="ic" viewBox="0 0 24 24" width="13" height="13"><path d="M17 3l4 4L8 20l-5 1 1-5L17 3z"/></svg></button>';
-      d.addEventListener('click',function(){pick(q,i);});
-      d.querySelector('.pen').addEventListener('click',function(e){e.stopPropagation();toggleMark(q.id+'#o'+i,d,null);});
-      opts.appendChild(d);
-    });
+    var opts=buildOptions(q);
     card.appendChild(top);card.appendChild(stem);card.appendChild(opts);
     card.appendChild(el('div','fb'));
     return card;
@@ -1524,14 +1626,7 @@ safe('Deneme',function(){
     var stem=el('p','stem',q.stem);
     stem.setAttribute('data-mk',q.id+'#stem');stem.title='T\u0131klay\u0131p bu sat\u0131r\u0131 i\u015faretle';
     stem.addEventListener('click',function(){toggleMark(q.id+'#stem',stem,null);});
-    var opts=el('div','opts');
-    q.opts.forEach(function(o,i){
-      var d=el('div','opt');d.setAttribute('data-mk',q.id+'#o'+i);
-      d.innerHTML='<span class="key">'+'ABCDE'[i]+'</span><span>'+esc(o[0])+'</span><span class="mk"></span><button class="pen" title="\u015e\u0131kk\u0131 i\u015faretle / kald\u0131r"><svg class="ic" viewBox="0 0 24 24" width="13" height="13"><path d="M17 3l4 4L8 20l-5 1 1-5L17 3z"/></svg></button>';
-      d.addEventListener('click',function(){pick(q,i);});
-      d.querySelector('.pen').addEventListener('click',function(e){e.stopPropagation();toggleMark(q.id+'#o'+i,d,null);});
-      opts.appendChild(d);
-    });
+    var opts=buildOptions(q);
     right.appendChild(top);right.appendChild(stem);right.appendChild(opts);right.appendChild(el('div','fb'));
     sq.appendChild(left);sq.appendChild(right);
     return sq;
@@ -1546,8 +1641,12 @@ safe('Deneme',function(){
     var card=document.getElementById('q'+q.id);if(!card)return;
     var c=CATS[q.cat]||{name:'?',color:'#333'};
     card.classList.add('answered');
-    var chosen=state.ans[q.id];var ok=(chosen===q.ans);
+    var chosen=state.ans[q.id];
+    if(!Number.isInteger(chosen)||chosen<0||chosen>=q.opts.length){card.classList.remove('answered');return;}
+    var ok=(chosen===q.ans);
     Array.prototype.forEach.call(card.querySelectorAll('.opt'),function(b,i){
+      var choice=b.querySelector('.choice');
+      if(choice){choice.setAttribute('aria-pressed',String(i===chosen));choice.setAttribute('aria-disabled','true');}
       b.classList.toggle('correct',i===q.ans);
       b.classList.toggle('wrongpick',i===chosen&&!ok);
       b.querySelector('.mk').innerHTML=(i===q.ans)?'<svg class="ic" viewBox="0 0 24 24" width="18" height="18"><polyline points="20 6 9 17 4 12"/></svg>':((i===chosen)?'<svg class="ic" viewBox="0 0 24 24" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>':'');
@@ -1557,7 +1656,7 @@ safe('Deneme',function(){
     var evq=(q.ev||[]).map(function(id){var s=SENT[id];if(!s)return '';return (s.sp?esc(s.sp)+': ':'')+'\u201C'+esc(s.text)+'\u201D';}).join(' ');
     var okIco=ok?'<polyline points="20 6 9 17 4 12"/>':'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
     fb.innerHTML=
-      '<div class="fb-h '+(ok?'ok':'no')+'"><svg class="ic" viewBox="0 0 24 24" width="18" height="18">'+okIco+'</svg>'+(ok?'\u00d0o\u011fru \u2014 '+c.name+' becerisi yerinde':'Yanl\u0131\u015f \u2014 do\u011fru cevap: '+'ABCDE'[q.ans])+'</div>'+
+      '<div class="fb-h '+(ok?'ok':'no')+'"><svg class="ic" viewBox="0 0 24 24" width="18" height="18">'+okIco+'</svg>'+(ok?'Doğru \u2014 '+c.name+' becerisi yerinde':'Yanl\u0131\u015f \u2014 do\u011fru cevap: '+'ABCDE'[q.ans])+'</div>'+
       '<div class="fb-b">'+
         (ok?'':'<h4>Se\u00e7imin analizi \u00b7 <b>'+'ABCDE'[chosen]+'</b></h4><p class="fb-p">'+esc(q.opts[chosen][1])+'</p>')+
         '<h4>Neden <b>'+'ABCDE'[q.ans]+'</b> do\u011fru?</h4>'+
@@ -1608,7 +1707,7 @@ safe('Deneme',function(){
           if(prefs.some(function(p){return k.indexOf(p)===0;})){
             delete state.marks[k];n++;
             var node=markNode(k);
-            if(node){node.classList.remove('umark');var p=node.querySelector('.pen');if(p)p.classList.remove('on');}
+            if(node){node.classList.remove('umark');var p=node.querySelector('.pen');if(p){p.classList.remove('on');p.setAttribute('aria-pressed','false');}}
           }
         });
         save();updateTabs(di);
@@ -1667,7 +1766,7 @@ safe('Deneme',function(){
 
 /* ── 6. Karne ───────────────────────────────────────────── */
 function updateReport(){
-  var done=Object.keys(state.ans).length;
+  var done=QUESTIONS.filter(function(q){return state.ans[q.id]!==undefined;}).length;
   var right=0;
   QUESTIONS.forEach(function(q){if(state.ans[q.id]!==undefined&&state.ans[q.id]===q.ans)right++;});
   var wrong=done-right;
@@ -1710,7 +1809,7 @@ safe('S\u0131f\u0131rlama',function(){
     QUESTIONS.forEach(function(q){
       var card=document.getElementById('q'+q.id);if(!card)return;
       card.classList.remove('answered');
-      Array.prototype.forEach.call(card.querySelectorAll('.opt'),function(b){b.classList.remove('correct','wrongpick');var m=b.querySelector('.mk');if(m)m.innerHTML='';});
+      Array.prototype.forEach.call(card.querySelectorAll('.opt'),function(b){b.classList.remove('correct','wrongpick');var m=b.querySelector('.mk');if(m)m.innerHTML='';var choice=b.querySelector('.choice');if(choice){choice.setAttribute('aria-pressed','false');choice.removeAttribute('aria-disabled');}});
       var fb=card.querySelector('.fb');if(fb){fb.classList.remove('show');fb.innerHTML='';}
     });
     Array.prototype.forEach.call(document.querySelectorAll('.dl.evid,.fact.evid'),function(s){s.classList.remove('evid');});
@@ -1777,7 +1876,7 @@ safe('\u00c7al\u0131\u015fma K\u00e2\u011f\u0131d\u0131',function(){
     return '<div class="ws-kq" style="--c:'+c.color+'"><p class="ws-kqh"><b>'+q.id+' \u2014 DO\u011eRU CEVAP: '+'ABCDE'[q.ans]+'</b><span>'+c.name+'</span></p><p class="ws-kw">'+esc(q.why)+'</p><p class="ws-ke"><b>Kan\u0131t:</b> '+ev+'</p><p class="ws-ks"><b>Strateji:</b> '+esc(q.strat)+'</p></div>';
   }).join('');
   var key=el('div','ws-key');
-  key.innerHTML='<div class="ws-kh"><b>Cevap Anahtar\u0131 \u00b7 \u00d6\u011fretmen N\u015fhas\u0131</b><span>Bu sayfalar\u0131 \u00f6\u011frenciye da\u011f\u0131tmadan \u00f6nce ay\u0131r\u0131n\u0131z</span></div>'+
+  key.innerHTML='<div class="ws-kh"><b>Cevap Anahtar\u0131 \u00b7 \u00d6\u011fretmen N\u00fcshas\u0131</b><span>Bu sayfalar\u0131 \u00f6\u011frenciye da\u011f\u0131tmadan \u00f6nce ay\u0131r\u0131n\u0131z</span></div>'+
     (QUESTIONS.length?'<div class="ws-kgrid">'+QUESTIONS.map(function(q){return '<div class="kg"><span>'+q.id+'</span><b>'+'ABCDE'[q.ans]+'</b></div>';}).join('')+'</div>':'')+
     '<table class="ws-ksum"><thead><tr><th>Beceri Kategorisi</th><th>Soru Say\u0131s\u0131</th><th>Soru Numaralar\u0131</th></tr></thead><tbody>'+ksum+'</tbody></table>'+
     '<p class="ws-kfoot">\u015e\u0131k da\u011f\u0131l\u0131m\u0131 dengelidir: A\u00d75 \u00b7 B\u00d75 \u00b7 C\u00d74 \u00b7 D\u00d75 \u00b7 E\u00d75 (24 soru). Sorular bu sayfa i\u00e7in \u00f6zg\u00fcn yaz\u0131lm\u0131\u015ft\u0131r.</p>'+
