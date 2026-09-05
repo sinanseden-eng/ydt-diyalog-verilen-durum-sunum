@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════════
+  YDT DİYALOG & DURUM LAB — tek dosyalık statik site (harici bağımlılık yok)
+  Reading Lab ile aynı arabirim: bülten estetiği, 6 beceri dersi,
+  İşlev Lab simülatörü, yan yana panelli deneme, karne, A4 worksheet.
+
+  BÖLÜM A — DİYALOG: 6 konuşma × 2 boşluk = 12 soru (yan yana panel)
+  BÖLÜM B — DURUM: 12 özgün durum sorusu (kart içi iki kolon: DURUM ⇄ ŞIKLAR)
+
+  Not: Paylaşılan iki PDF yalnızca Reading içerdiğinden, bu bölümün
+  soruları setin ÖSYM formatına uygun biçimde sayfa için yazılmıştır.
+  Şık dağılımı dengelidir: A×5 · B×5 · C×4 · D×5 · E×5 (24 soru).
+
+  GITHUB + NETLIFY DAĞITIMI:
+    1) Bu dosyayı bir GitHub deposuna "index.html" adıyla yükleyin.
+    2) Netlify → "Add new site" → "Import an existing project" ile
+       repo'yu bağlayın (Build command: yok / Publish directory: .)
+       YA DA "Deploy manually" ile dosyayı sürükleyip bırakın.
+    3) Site otomatik olarak index.html'i sunar. Yapılandırma gerekmez.
+  ═══════════════════════════════════════════════════════════════════
+-->
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YDT Diyalog & Durum Lab — Sınav Stratejileri, Özgün Deneme ve Çalışma Kâğıdı</title>
+<meta name="description" content="YDT/YDS/YÖKDİL Diyalog tamamlama ve Duruma uygun ifade soruları için 6 beceri dersi, İşlev Lab simülatörü, 24 soruluk interaktif deneme ve baskıya hazır A4 çalışma kâğıdı.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F2E5; --card:#FCFAF2; --paper2:#EFE8D5;
+    --ink:#211B12; --ink2:#6A5F4C; --line:#D9CFB8;
+    --ok:#1E7A3E; --okbg:#E4F1E4; --bad:#C22B1E; --badbg:#F7E4E0;
+    --hl:#F6DA49;           /* sistem vurgusu (kanıt) */
+    --umark:#B7D5F2;        /* kullanıcının kendi mavi vurgusu */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Bricolage Grotesque',system-ui,sans-serif;
+    font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  .serif{font-family:'Newsreader',Georgia,serif}
+  a{color:inherit}
+  .ic{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-0.12em;flex:none}
+
+  /* ---------- Üst bar ---------- */
+  .topbar{position:sticky;top:0;z-index:60;background:var(--paper);border-bottom:2px solid var(--ink)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;height:58px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;letter-spacing:.04em;font-size:.95rem;white-space:nowrap}
+  .brand svg{width:30px;height:30px;flex:none}
+  .brand .sub{font-family:'Newsreader',serif;font-style:italic;font-weight:500;color:var(--ink2);letter-spacing:0;margin-left:2px}
+  .topnav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+  .topnav::-webkit-scrollbar{display:none}
+  .topnav a{text-decoration:none;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:6px 10px;border-bottom:2px solid transparent;white-space:nowrap}
+  .topnav a:hover{background:var(--paper2)}
+  .topnav a.on{border-bottom-color:var(--ink)}
+
+  /* ---------- Masthead + Hero ---------- */
+  .mast{border-bottom:2px solid var(--ink);padding:8px 0}
+  .mast .wrap{display:flex;justify-content:space-between;gap:12px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--ink2)}
+  .hero{padding:54px 0 30px;position:relative}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  .hero-kicker{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.22em;color:var(--bad);margin-bottom:14px}
+  h1.big{font-weight:800;font-size:clamp(2.6rem,6.2vw,4.6rem);line-height:.98;letter-spacing:-.015em;text-transform:uppercase}
+  h1.big .mark{background:var(--hl);box-shadow:.14em 0 0 var(--hl),-.14em 0 0 var(--hl)}
+  h1.big .serif{display:block;font-weight:500;font-style:italic;text-transform:none;font-size:.62em;letter-spacing:0;margin-top:.18em;color:var(--ink)}
+  .hero-lead{font-family:'Newsreader',serif;font-size:1.15rem;color:var(--ink2);max-width:52ch;margin:22px 0 26px}
+  .hero-lead b{color:var(--ink)}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:inherit;font-weight:700;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;padding:12px 20px;border:2px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;text-decoration:none;box-shadow:4px 4px 0 rgba(33,27,18,.35);transition:transform .12s,box-shadow .12s}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 rgba(33,27,18,.35)}
+  .btn.ghost{background:var(--card);color:var(--ink)}
+  .btn.small{padding:8px 14px;font-size:.72rem;box-shadow:3px 3px 0 rgba(33,27,18,.3)}
+  .hero-badges{display:flex;gap:18px;margin-top:28px;flex-wrap:wrap}
+  .hb{border-top:2px solid var(--ink);padding-top:6px;min-width:74px}
+  .hb b{display:block;font-size:1.35rem;font-weight:800}
+  .hb span{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink2)}
+
+  /* Hero kart yığını */
+  .stack{position:relative;height:330px}
+  .stackcard{position:absolute;width:88%;background:var(--card);border:2px solid var(--ink);box-shadow:6px 6px 0 rgba(33,27,18,.28);padding:16px 18px 14px}
+  .stackcard .tag{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.16em;color:#FCFAF2;background:var(--c);display:inline-block;padding:3px 8px;margin-bottom:9px}
+  .stackcard p{font-family:'Newsreader',serif;font-style:italic;font-size:1.02rem;line-height:1.35}
+  .stackcard small{display:block;font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--ink2);margin-top:8px}
+  .stackcard:nth-child(1){right:0;top:0;transform:rotate(-3.2deg);border-left:6px solid var(--c)}
+  .stackcard:nth-child(2){left:0;top:112px;transform:rotate(1.8deg);border-left:6px solid var(--c);z-index:2}
+  .stackcard:nth-child(3){right:6%;top:224px;transform:rotate(-1.4deg);border-left:6px solid var(--c);z-index:3}
+  .stamp{position:absolute;right:-6px;top:-24px;width:128px;height:128px;z-index:5;transform:rotate(-12deg);pointer-events:none;color:var(--bad);opacity:.85}
+
+  /* ---------- Beceri şeridi listesi ---------- */
+  .strips{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);background:var(--card)}
+  .strip{display:grid;grid-template-columns:64px 210px 1fr 60px;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer;background:transparent;transition:background .15s}
+  .strip:last-child{border-bottom:none}
+  .strip:hover{background:var(--paper2)}
+  .strip .num{font-weight:800;font-size:1.3rem;color:var(--c);border-right:3px solid var(--c);padding-right:12px}
+  .strip .nm b{display:block;font-weight:800;font-size:.95rem}
+  .strip .nm span{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink2)}
+  .strip .ex{font-family:'Newsreader',serif;font-style:italic;color:var(--ink2);font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .strip .cnt{text-align:right;font-weight:800;font-size:.8rem;color:var(--c);white-space:nowrap}
+
+  /* ---------- Bölüm başlıkları ---------- */
+  section{padding:64px 0 20px}
+  .sec-head{display:flex;align-items:baseline;gap:16px;border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:30px;flex-wrap:wrap}
+  .sec-head .no{font-family:'Newsreader',serif;font-style:italic;font-size:1.15rem;color:var(--ink2)}
+  .sec-head h2{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:800;letter-spacing:-.01em;text-transform:uppercase}
+  .sec-head .d{margin-left:auto;font-size:.85rem;color:var(--ink2);max-width:38ch}
+
+  /* ---------- Dersler (akordeon) ---------- */
+  .lesson{border:2px solid var(--ink);background:var(--card);margin-bottom:16px;box-shadow:5px 5px 0 rgba(33,27,18,.18)}
+  .lesson.open{box-shadow:8px 8px 0 rgba(33,27,18,.22)}
+  .lesson-h{display:grid;grid-template-columns:70px 1fr 40px;align-items:center;gap:10px;padding:0;cursor:pointer;border:none;background:transparent;font-family:inherit;width:100%;text-align:left}
+  .lesson-h .cbar{align-self:stretch;display:flex;align-items:center;justify-content:center;color:var(--c);font-weight:800;font-size:1.35rem;background:color-mix(in srgb,var(--c) 12%,transparent);border-right:3px solid var(--c)}
+  .lesson-h .tts{padding:14px 6px}
+  .lesson-h .tts b{display:block;font-size:1.12rem;font-weight:800}
+  .lesson-h .tts span{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink2)}
+  .lesson-h .chev{color:var(--ink2);display:flex;justify-content:center;transition:transform .2s}
+  .lesson.open .chev{transform:rotate(180deg)}
+  .lesson-b{display:none;padding:22px;border-top:2px solid var(--line)}
+  .lesson.open .lesson-b{display:block}
+  .lesson-b .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .roots-t{width:100%;border-collapse:collapse;font-size:.9rem}
+  .roots-t td{border:1px solid var(--line);padding:8px 12px;vertical-align:top}
+  .roots-t td:first-child{font-family:'Newsreader',serif;font-style:italic;font-size:.95rem;width:52%;background:color-mix(in srgb,var(--c) 6%,transparent)}
+  .roots-t td:last-child{color:var(--ink2);font-size:.82rem}
+  .h-mini{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.16em;color:var(--c);margin:0 0 8px}
+  .steps{list-style:none;counter-reset:st}
+  .steps li{counter-increment:st;position:relative;padding-left:34px;margin-bottom:12px;font-size:.92rem}
+  .steps li::before{content:counter(st);position:absolute;left:0;top:1px;width:22px;height:22px;border:2px solid var(--c);color:var(--c);font-weight:800;font-size:.75rem;display:flex;align-items:center;justify-content:center}
+  .trapbox{border:2px dashed var(--c);background:color-mix(in srgb,var(--c) 7%,transparent);padding:14px 16px;margin-top:16px;font-size:.88rem}
+  .trapbox b{color:var(--c);text-transform:uppercase;letter-spacing:.1em;font-size:.7rem;display:block;margin-bottom:5px}
+
+  /* Modüller (kibarlık merdiveni vb.) */
+  .modalmod{border:2px solid var(--ink);background:var(--card);box-shadow:8px 8px 0 rgba(33,27,18,.18);padding:26px;margin-top:30px}
+  .modalmod table{width:100%;border-collapse:collapse;font-size:.9rem;margin:14px 0 16px}
+  .modalmod th{background:var(--ink);color:var(--paper);text-align:left;padding:8px 12px;font-size:.7rem;text-transform:uppercase;letter-spacing:.12em}
+  .modalmod td{border:1px solid var(--line);padding:9px 12px;vertical-align:top}
+  .modalmod td:first-child{font-weight:800;white-space:nowrap}
+  .exbox{background:var(--paper2);border-left:4px solid var(--ink);padding:12px 16px;font-family:'Newsreader',serif;font-style:italic;font-size:.95rem}
+
+  /* ---------- İşlev Lab ---------- */
+  #fnlab .lab{background:var(--paper2);border:2px solid var(--ink);padding:30px;box-shadow:8px 8px 0 rgba(33,27,18,.18)}
+  .lab-grid{display:grid;grid-template-columns:1.4fr .6fr;gap:26px}
+  .rootcard{background:var(--card);border:2px solid var(--ink);box-shadow:6px 6px 0 rgba(33,27,18,.25);padding:26px;min-height:150px}
+  .rootcard .lbl{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.18em;color:var(--ink2);margin-bottom:10px}
+  .rootcard .root{font-family:'Newsreader',serif;font-style:italic;font-size:1.35rem;line-height:1.35}
+  .rootcard .tr{font-size:.85rem;color:var(--ink2);margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+  .catbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:18px}
+  .catb{font-family:inherit;font-weight:700;font-size:.74rem;padding:10px 4px;border:2px solid var(--c);background:color-mix(in srgb,var(--c) 8%,transparent);color:var(--ink);cursor:pointer;transition:background .12s,transform .12s}
+  .catb:hover{background:var(--c);color:var(--card);transform:translateY(-2px)}
+  .catb.wasright{background:var(--c);color:var(--card)}
+  .catb.waswrong{background:var(--bad);border-color:var(--bad);color:var(--card)}
+  .simfb{margin-top:16px;border-top:2px solid var(--line);padding-top:14px;font-size:.9rem;display:none}
+  .simfb.show{display:block}
+  .simfb .verdict{font-weight:800;font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:6px}
+  .simfb .verdict.ok{color:var(--ok)} .simfb .verdict.no{color:var(--bad)}
+  .simside{display:flex;flex-direction:column;gap:12px}
+  .simstat{background:var(--card);border:2px solid var(--ink);padding:14px 16px}
+  .simstat b{font-size:1.7rem;font-weight:800;display:block;line-height:1.1}
+  .simstat span{font-size:.66rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink2)}
+
+  /* ═══════════ DENEME ═══════════ */
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+  .chip{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--card);background:var(--c);padding:4px 10px}
+  .footnote{font-size:.78rem;color:var(--ink2);font-style:italic;font-family:'Newsreader',serif;margin-top:10px}
+  .partdiv{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:34px 0 18px;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:12px 18px;box-shadow:6px 6px 0 rgba(33,27,18,.2)}
+  .partdiv b{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase}
+  .partdiv span{font-size:.68rem;color:#B7AD97;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+
+  /* Diyalog grupları: yan yana panel */
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-bottom:42px}
+  .split-h{grid-column:1/-1;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--ink);color:var(--paper);border:2px solid var(--ink);padding:12px 18px;box-shadow:6px 6px 0 rgba(33,27,18,.2)}
+  .split-h .pno{font-size:.6rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;background:var(--paper);color:var(--ink);padding:3px 9px;flex:none}
+  .split-h h3{font-family:'Newsreader',serif;font-weight:600;font-size:1.25rem;color:#FCFAF2;line-height:1.2}
+  .split-h .pmeta{font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:#B7AD97}
+  .split-h .hint{margin-left:auto;font-size:.68rem;color:#DDD4C0;display:flex;align-items:center;gap:6px}
+  .split-h .clr{font-family:inherit;font-weight:700;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:var(--paper);border:1.5px solid #6A5F4C;padding:6px 11px;cursor:pointer;transition:background .12s,border-color .12s}
+  .split-h .clr:hover{background:#3A3223;border-color:#8A7F66}
+
+  .pane{border:2px solid var(--ink);background:var(--card);box-shadow:6px 6px 0 rgba(33,27,18,.2);display:flex;flex-direction:column;min-height:0;height:clamp(460px,calc(100vh - 220px),760px)}
+  .pane-tab{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;border-bottom:2px solid var(--line);font-size:.6rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);background:var(--paper2)}
+  .pane-tab b{color:var(--ink);display:flex;align-items:center;gap:7px}
+  .pane-tab span{font-weight:700;letter-spacing:.06em}
+  .pane-body{flex:1;min-height:0;overflow-y:auto;padding:18px 22px}
+  .pane-body .qcard:first-child{margin-top:0}
+
+  /* Diyalog transkripti */
+  .dl{display:grid;grid-template-columns:92px 1fr;gap:12px;padding:9px 4px;border-bottom:1px dashed var(--line);cursor:pointer;transition:background .15s}
+  .dl:last-child{border-bottom:none}
+  .dl:hover{background:color-mix(in srgb,var(--umark) 35%,transparent)}
+  .dl .spk{font-weight:800;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink2);padding-top:4px}
+  .dl .txt{font-family:'Newsreader',serif;font-size:1.05rem;line-height:1.7;color:#2c241a}
+  .blip{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;border:2px solid var(--bad);color:var(--bad);background:var(--card);font-weight:800;font-size:.72rem;border-radius:11px;cursor:pointer;vertical-align:-2px;padding:0 9px;font-family:inherit;margin:0 2px;transition:background .12s,color .12s}
+  .blip:hover{background:var(--bad);color:var(--card)}
+
+  /* Vurgular (satır + durum olgusu ortak) */
+  .dl.umark,.fact.umark{background:var(--umark);box-shadow:.28em 0 0 var(--umark),-.28em 0 0 var(--umark)}
+  .dl.evid,.fact.evid{background:var(--hl);box-shadow:.28em 0 0 var(--hl),-.28em 0 0 var(--hl)}
+  .dl.evid.umark,.fact.evid.umark{background:linear-gradient(110deg,var(--hl) 0 47%,var(--umark) 47% 100%)}
+
+  /* Durum kartı: kart içi iki kolon (DURUM ⇄ ŞIKLAR) */
+  .sq{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);border:2px solid var(--ink);background:var(--card);box-shadow:5px 5px 0 rgba(33,27,18,.15);margin:18px 0}
+  .sq-b{border-right:2px solid var(--line);display:flex;flex-direction:column;background:color-mix(in srgb,var(--c) 4%,var(--card))}
+  .sq-tab{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;border-bottom:2px solid var(--line);font-size:.6rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);background:var(--paper2)}
+  .sq-tab b{color:var(--ink)}
+  .sq-body{padding:14px 18px}
+  .fact{font-family:'Newsreader',serif;font-size:1rem;line-height:1.6;margin-bottom:10px;cursor:pointer;transition:background .15s}
+  .fact:last-child{margin-bottom:0}
+  .fact:hover{background:color-mix(in srgb,var(--umark) 35%,transparent)}
+  .fact .fr{font-family:'Bricolage Grotesque',sans-serif;font-style:normal;font-weight:800;color:var(--c);font-size:.78rem;margin-right:4px}
+  .sq-r{padding:16px 20px;display:flex;flex-direction:column}
+
+  /* Soru kartları (ortak) */
+  .qcard{border:2px solid var(--ink);background:var(--card);box-shadow:5px 5px 0 rgba(33,27,18,.15);padding:20px 22px;margin:18px 0}
+  .qcard.flash{outline:3px solid var(--hl);outline-offset:2px}
+  .qtop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .qtop .chip{background:var(--c)}
+  .qtop .qn{font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+  .qtop .pts{margin-left:auto;font-size:.66rem;color:var(--ink2);font-style:italic;font-family:'Newsreader',serif}
+  .stem{font-family:'Newsreader',serif;font-size:1.12rem;line-height:1.45;margin-bottom:16px;cursor:pointer;transition:background .15s}
+  .stem:hover{background:color-mix(in srgb,var(--umark) 30%,transparent)}
+  .stem.umark{background:var(--umark);box-shadow:.28em 0 0 var(--umark),-.28em 0 0 var(--umark)}
+  .stem .kw{font-style:normal;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;text-decoration:underline;text-decoration-color:var(--c);text-decoration-thickness:2.5px;text-underline-offset:4px}
+
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:grid;grid-template-columns:34px 1fr 26px 30px;align-items:start;gap:12px;padding:10px 12px;border:1.5px solid var(--line);background:var(--paper);cursor:pointer;font-family:inherit;font-size:.95rem;text-align:left;width:100%;color:var(--ink);transition:border-color .12s,background .12s}
+  .qcard:not(.answered) .opt:hover,.sq:not(.answered) .opt:hover{border-color:var(--ink);background:var(--paper2)}
+  .opt .key{font-weight:800;border:1.5px solid var(--ink);width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.8rem;background:var(--card);flex:none}
+  .opt .mk{display:flex;justify-content:center;align-items:center;color:transparent}
+  .pen{width:26px;height:26px;flex:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink2);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:background .12s,border-color .12s,color .12s}
+  .pen:hover{border-color:var(--ink);color:var(--ink);background:color-mix(in srgb,var(--umark) 60%,var(--card))}
+  .pen.on{background:var(--umark);border-color:var(--ink);color:var(--ink)}
+  .opt.umark{border:2px solid var(--ink);background:color-mix(in srgb,var(--umark) 40%,var(--paper))}
+  .answered .opt{cursor:default}
+  .answered .opt.correct{border:2px solid var(--ok);background:var(--okbg)}
+  .answered .opt.correct .key{background:var(--ok);color:#fff;border-color:var(--ok)}
+  .answered .opt.correct .mk{color:var(--ok)}
+  .answered .opt.wrongpick{border:2px solid var(--bad);background:var(--badbg)}
+  .answered .opt.wrongpick .key{background:var(--bad);color:#fff;border-color:var(--bad)}
+  .answered .opt.wrongpick .mk{color:var(--bad)}
+
+  .fb{display:none;margin-top:18px;border:2px solid var(--ink)}
+  .fb.show{display:block}
+  .fb-h{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem;padding:10px 16px}
+  .fb-h.ok{background:var(--ok)} .fb-h.no{background:var(--bad)}
+  .fb-b{padding:18px;background:var(--card)}
+  .fb-b h4{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.16em;color:var(--ink2);margin:18px 0 7px}
+  .fb-b h4:first-child{margin-top:0}
+  .fb-b h4 b{color:var(--ink)}
+  .fb-p{font-size:.93rem}
+  .evq{border-left:4px solid var(--c);background:color-mix(in srgb,var(--c) 7%,transparent);padding:12px 16px;font-family:'Newsreader',serif;font-style:italic;font-size:.98rem;margin:8px 0}
+  .dump{list-style:none;border:1px solid var(--line)}
+  .dump li{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:9px 12px;border-bottom:1px solid var(--line);font-size:.88rem}
+  .dump li:last-child{border-bottom:none}
+  .dump .k{font-weight:800}
+  .dump li.okr{background:var(--okbg)} .dump li.okr .k{color:var(--ok)}
+  .dump li.mine{background:var(--badbg)} .dump li.mine .k{color:var(--bad)}
+  .fb-duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+  .fb-box{border:1.5px solid var(--line);padding:12px 14px;font-size:.87rem}
+  .fb-box.tint{border-color:var(--c);background:color-mix(in srgb,var(--c) 7%,transparent)}
+  .fb-box b{display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.14em;color:var(--c);margin-bottom:5px}
+  .fb-act{margin-top:16px}
+
+  /* ---------- Karne ---------- */
+  .bignum-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+  .bignum{border:2px solid var(--ink);background:var(--card);box-shadow:6px 6px 0 rgba(33,27,18,.18);padding:18px;text-align:center}
+  .bignum b{display:block;font-size:2.4rem;font-weight:800;line-height:1}
+  .bignum span{font-size:.66rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink2)}
+  .catbar{display:grid;grid-template-columns:210px 1fr 90px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+  .catbar .nm{font-weight:800;font-size:.88rem}
+  .catbar .nm span{display:block;font-weight:500;font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink2)}
+  .catbar .track{height:16px;border:1.5px solid var(--ink);background:var(--paper2);position:relative}
+  .catbar .fill{position:absolute;inset:0;width:0;background:var(--c);transition:width .5s}
+  .catbar .sc{text-align:right;font-weight:800;font-size:.85rem}
+  .report-msg{margin:22px 0;font-size:.95rem;border-left:4px solid var(--ink);padding:10px 16px;background:var(--card)}
+  .reset-row{margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .confirmbox{display:none;gap:10px;align-items:center}
+  .confirmbox.show{display:flex}
+
+  /* ═══════════ §05 ÇALIŞMA KÂĞIDI ═══════════ */
+  #calisma .ws-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  #calisma .ws-note{font-size:.82rem;color:var(--ink2);max-width:78ch;margin-bottom:22px}
+  .ws-doc{--c:#14110B;max-width:820px;margin:0 auto;background:#FFFEF9;border:2px solid var(--ink);box-shadow:10px 10px 0 rgba(33,27,18,.18);color:#14110B}
+  .ws-doc .kw{text-decoration-color:#14110B}
+  .ws-cover{padding:24px 34px 20px;border-bottom:3px double #14110B}
+  .ws-hatch{height:8px;background:repeating-linear-gradient(45deg,#14110B 0 5px,transparent 5px 11px);margin-bottom:16px}
+  .ws-top{display:flex;align-items:center;gap:10px;font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#6A5F4C;margin-bottom:14px}
+  .ws-mark{width:26px;height:26px;border:2.5px solid #14110B;color:#C13F14;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+  .ws-top .ws-tr{margin-left:auto}
+  .ws-title{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;letter-spacing:-.01em;text-transform:uppercase;line-height:1}
+  .ws-sub{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.18em;margin:8px 0 3px;color:#C13F14}
+  .ws-ed{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6A5F4C;margin-bottom:18px}
+  .ws-id{display:flex;gap:18px;flex-wrap:wrap;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid #14110B;padding:10px 14px;margin-bottom:16px}
+  .ws-id span{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+  .ws-id i{display:inline-block;border-bottom:1.2px solid #14110B;min-width:110px;height:1em;font-style:normal}
+  .ws-id i.w-sm{min-width:56px}
+  .ws-inst{border:1.5px solid #14110B;padding:12px 16px 10px;margin-bottom:18px}
+  .ws-inst>b{display:block;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px}
+  .ws-inst ol{margin-left:18px;font-size:.85rem;line-height:1.55}
+  .ws-inst li{margin-bottom:5px}
+  .ws-at{font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
+  .ws-ans{width:100%;border-collapse:collapse}
+  .ws-ans th{border:1.2px solid #14110B;font-size:.78rem;font-weight:800;padding:5px 2px;background:#EFE8D5}
+  .ws-ans td{border:1.2px solid #14110B;text-align:center;padding:7px 2px}
+  .bub{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border:1.2px solid #14110B;border-radius:50%;font-size:10px;font-weight:800;margin:0 3px;vertical-align:middle}
+  .ws-rub{margin-top:16px}
+  .ws-rub>b{display:block;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px}
+  .ws-rub table{width:100%;border-collapse:collapse;font-size:.8rem}
+  .ws-rub td{border:1.2px solid #14110B;padding:5px 10px}
+  .ws-rub td:first-child{font-weight:800;white-space:nowrap;background:#EFE8D5}
+  .ws-credit{margin-top:14px;font-size:.62rem;color:#6A5F4C;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+
+  .ws-pas{padding:22px 34px 26px;border-bottom:3px double #14110B}
+  .ws-ph{display:flex;align-items:baseline;gap:12px;border-bottom:1.5px solid #14110B;padding-bottom:8px;margin-bottom:14px;flex-wrap:wrap}
+  .ws-ph .ws-pno{font-weight:800;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;background:#14110B;color:#FFFEF9;padding:3px 9px;flex:none}
+  .ws-ph h3{font-family:'Newsreader',serif;font-weight:600;font-size:1.25rem;line-height:1.2}
+  .ws-ph .ws-pm{font-size:.66rem;color:#6A5F4C;margin-left:auto;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+  .ws-pt{font-family:'Newsreader',serif;font-size:1.02rem;line-height:1.75}
+  .ws-pt p{margin-bottom:.7em}
+  .ws-pt p:last-child{margin-bottom:0}
+  .ws-pt .spw{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:.8rem}
+  .ws-bl{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;color:#C13F14}
+  .ws-note-line{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#6A5F4C;margin:10px 0 14px}
+  .ws-q{margin:14px 0 0}
+  .ws-qq{font-family:'Newsreader',serif;font-size:1rem;line-height:1.5}
+  .ws-qq b{font-family:'Bricolage Grotesque',sans-serif}
+  .ws-oo{list-style:none;margin:8px 0 0}
+  .ws-oo li{display:grid;grid-template-columns:26px 1fr;gap:6px;padding:2.5px 0;font-size:.94rem;line-height:1.45}
+  .ws-oo .k{font-weight:800}
+  .ws-partb{padding:22px 34px 26px;border-bottom:3px double #14110B}
+
+  .ws-key{padding:24px 34px 28px}
+  .ws-kh{display:flex;align-items:center;gap:12px;background:#14110B;color:#FFFEF9;padding:12px 16px;margin-bottom:16px;flex-wrap:wrap}
+  .ws-kh b{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase}
+  .ws-kh span{font-size:.68rem;color:#C9BFA8;letter-spacing:.05em;text-transform:uppercase;font-weight:700}
+  .ws-kgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;margin-bottom:16px}
+  .kg{border:1.5px solid #14110B;text-align:center;padding:7px 2px;font-size:.92rem;font-weight:800;background:#EFE8D5}
+  .kg span{color:#6A5F4C;margin-right:6px}
+  .kg b{font-size:1.05rem}
+  .ws-ksum{width:100%;border-collapse:collapse;font-size:.84rem;margin-bottom:10px}
+  .ws-ksum th{background:#14110B;color:#FFFEF9;text-align:left;padding:6px 10px;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase}
+  .ws-ksum td{border:1.2px solid #14110B;padding:5px 10px}
+  .ws-ksum td:first-child{font-weight:800}
+  .ws-kfoot{font-size:.66rem;color:#6A5F4C;font-style:italic;font-family:'Newsreader',serif;margin-bottom:18px}
+  .ws-kq{border:1.2px solid #C9BFA8;border-left:4px solid var(--c);padding:11px 15px;margin-bottom:10px}
+  .ws-kqh{display:flex;align-items:center;gap:10px;margin-bottom:5px;flex-wrap:wrap}
+  .ws-kqh b{font-size:.95rem;letter-spacing:.04em}
+  .ws-kqh span{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--c);border:1.2px solid var(--c);padding:2px 8px}
+  .ws-kw{font-size:.88rem;line-height:1.55}
+  .ws-ke{font-size:.82rem;font-family:'Newsreader',serif;font-style:italic;color:#4A4335;border-left:2px solid #C9BFA8;padding-left:10px;margin:6px 0}
+  .ws-ks{font-size:.84rem;line-height:1.5;color:#3A3223}
+  .ws-ks b{font-weight:800}
+
+  body.hidekey .ws-key{display:none}
+
+  /* ---------- Footer ---------- */
+  footer{margin-top:70px;background:var(--ink);color:var(--paper);padding:44px 0 34px}
+  footer .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:44px}
+  footer h5{font-size:.68rem;text-transform:uppercase;letter-spacing:.2em;color:#C9BFA8;margin-bottom:12px}
+  footer p{font-size:.86rem;color:#DDD4C0;line-height:1.7}
+  footer .fl{font-family:'Newsreader',serif;font-style:italic}
+  .deploy{border:1.5px solid #4A4335;padding:18px}
+  .deploy ol{margin:10px 0 0 18px;font-size:.84rem;color:#DDD4C0}
+  .deploy li{margin-bottom:8px}
+  .deploy code{background:#31291C;padding:2px 7px;font-size:.8rem;border:1px solid #4A4335}
+  .footrow{border-top:1px solid #4A4335;margin-top:34px;padding-top:16px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.72rem;color:#B7AD97;letter-spacing:.05em}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,80px);background:var(--ink);color:var(--paper);padding:11px 22px;font-size:.82rem;font-weight:700;letter-spacing:.05em;box-shadow:5px 5px 0 rgba(0,0,0,.3);opacity:0;transition:transform .3s,opacity .3s;z-index:99;pointer-events:none}
+  .toast.show{transform:translate(-50%,0);opacity:1}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .55s,transform .55s}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.btn{transition:none}}
+
+  /* ═══════════ YAZDIRMA ═══════════ */
+  @media print{
+    @page{size:A4;margin:13mm}
+    html,body{background:#fff}
+    body{font-size:10.5pt}
+    .topbar,.mast,.hero,.strips,section:not(#calisma),footer,.toast{display:none!important}
+    #calisma{padding:0}
+    #calisma .sec-head,#calisma .ws-bar,#calisma .ws-note{display:none!important}
+    #calisma .wrap{max-width:none;padding:0}
+    .reveal{opacity:1!important;transform:none!important}
+    .ws-doc{max-width:none;border:none;box-shadow:none;background:#fff}
+    .ws-cover{padding:0 0 2mm;border-bottom:3px double #14110B}
+    .ws-pas{padding:0 0 3mm;border-bottom:3px double #14110B;break-before:page}
+    .ws-partb{padding:0 0 3mm;border-bottom:3px double #14110B;break-before:page}
+    .ws-key{padding:0;break-before:page}
+    .ws-q,.ws-kq{break-inside:avoid}
+    .ws-qq{font-size:10pt}
+    .ws-oo li{font-size:9.5pt}
+    .ws-pt{font-size:10pt;line-height:1.55}
+    .ws-kw,.ws-ks{font-size:9pt}
+    .ws-ke{font-size:8.5pt}
+    body.onlykey .ws-cover,body.onlykey .ws-pas,body.onlykey .ws-partb{display:none!important}
+    body.onlykey .ws-key{display:block!important}
+  }
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:920px){
+    .hero .wrap{grid-template-columns:1fr}
+    .stack{height:auto;display:grid;gap:12px;max-width:430px}
+    .stackcard{position:static;transform:none;width:100%}
+    .stamp{display:none}
+    .lesson-b .grid{grid-template-columns:1fr}
+    .lab-grid{grid-template-columns:1fr}
+    .catbtns{grid-template-columns:repeat(2,1fr)}
+    .fb-duo{grid-template-columns:1fr}
+    .bignum-row{grid-template-columns:repeat(2,1fr)}
+    .catbar{grid-template-columns:130px 1fr 70px}
+    footer .wrap{grid-template-columns:1fr}
+    .strip{grid-template-columns:44px 1fr 56px}
+    .strip .ex{display:none}
+    .split{grid-template-columns:1fr;gap:14px}
+    .split-h .hint{margin-left:0;width:100%}
+    .pane{height:auto;box-shadow:5px 5px 0 rgba(33,27,18,.15)}
+    .pane-body{padding:16px 16px}
+    .pane-body.dtext{max-height:46vh}
+    .sq{grid-template-columns:1fr}
+    .sq-b{border-right:none;border-bottom:2px solid var(--line)}
+    .dl{grid-template-columns:78px 1fr}
+    .ws-cover,.ws-pas,.ws-partb,.ws-key{padding-left:18px;padding-right:18px}
+    .ws-kgrid{grid-template-columns:repeat(3,1fr)}
+  }
+</style>
+</head>
+<body id="top">
+
+<!-- ═══════════ ÜST BAR ═══════════ -->
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="1.5" y="1.5" width="29" height="29" fill="none" stroke="#211B12" stroke-width="3"/>
+        <text x="16" y="22.5" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="17" fill="#0E7568">D</text>
+      </svg>
+      YDT DİYALOG & DURUM LAB <span class="sub">opa fluent</span>
+    </a>
+    <nav class="topnav" id="topnav">
+      <a href="#dersler">Dersler</a>
+      <a href="#fnlab">İşlev Lab</a>
+      <a href="#deneme">Deneme</a>
+      <a href="#karne">Karne</a>
+      <a href="#calisma">Kâğıt</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══════════ MASTHEAD ═══════════ -->
+<div class="mast">
+  <div class="wrap">
+    <span>OPA FLUENT YAYINLARI</span>
+    <span>YDT · YDS · YÖKDİL</span>
+    <span>DİYALOG & DURUM BÜLTENİ · SAYI 02</span>
+  </div>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <p class="hero-kicker">Diyalog bütünlüğü · Durum analizi · Kibarlık merdiveni</p>
+      <h1 class="big">
+        Doğru sözü <span class="mark">doğru adrese</span>
+        <span class="serif">ulaştırmayı öğren.</span>
+      </h1>
+      <p class="hero-lead">Reading Lab'in kardeş sayısı: <b>6 beceri dersi</b> (bütünlük, işlev, ton, içerik, durum, niyet), <b>16 ifadeli İşlev Lab</b> ve <b>24 özgün soru</b> — 6 diyalog × 2 boşluk + 12 durum. Her şıkta tek tek geribildirim, <b>kanıt vurgusu</b>, A4 çalışma kâğıdı.</p>
+      <div class="cta-row">
+        <a class="btn" href="#dersler">Derse başla <svg class="ic" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a class="btn ghost" href="#deneme">Denemeye geç</a>
+        <a class="btn ghost" href="#calisma"><svg class="ic" viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Kâğıda git</a>
+      </div>
+      <div class="hero-badges">
+        <div class="hb"><b>6</b><span>Becerİ dersİ</span></div>
+        <div class="hb"><b>24</b><span>Özgün soru</span></div>
+        <div class="hb"><b>6+12</b><span>dİyalog + durum</span></div>
+        <div class="hb"><b>16</b><span>İşlev labİ_kökü</span></div>
+      </div>
+    </div>
+    <div class="stack" aria-hidden="true">
+      <svg class="stamp" viewBox="0 0 128 128">
+        <circle cx="64" cy="64" r="60" fill="none" stroke="currentColor" stroke-width="3.5"/>
+        <circle cx="64" cy="64" r="46" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="64" y="58" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="13" fill="currentColor" letter-spacing="1.5">ÖSYM</text>
+        <text x="64" y="76" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="13" fill="currentColor" letter-spacing="1.5">FORMAT</text>
+      </svg>
+      <div class="stackcard" style="--c:#C13F14">
+        <span class="tag">Diyalog</span>
+        <p>"(Merve): ----  (Onur): I'd love to help, but…"</p>
+        <small>Cevap satırı şablonu · yön tuzağına dikkat</small>
+      </div>
+      <div class="stackcard" style="--c:#0E7568">
+        <span class="tag">Durum</span>
+        <p>"(I) … (II) … (III) … Which of the following would you say?"</p>
+        <small>Numaralı olguların tamamı kısıttır</small>
+      </div>
+      <div class="stackcard" style="--c:#8F6400">
+        <span class="tag">Kibarlık</span>
+        <p>"I was wondering whether it might be possible…"</p>
+        <small>Resmî kanalda merdivenin tepesi</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ BECERİ ŞERİTLERİ ═══════════ -->
+<div class="strips">
+  <div class="wrap">
+    <div id="strips"></div>
+  </div>
+</div>
+
+<!-- ═══════════ 01 DERSLER ═══════════ -->
+<section id="dersler">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="no">§01</span>
+      <h2>Konu Anlatımı</h2>
+      <p class="d">Diyalog ve durum sorularının altı becerisi: tanıma tabloları, çözüm adımları ve tuzak makineleri.</p>
+    </div>
+    <div id="lessons"></div>
+
+    <!-- Kibarlık merdiveni -->
+    <div class="modalmod reveal">
+      <p class="h-mini" style="color:var(--ink)">Ek Modül · Kibarlık Merdiveni</p>
+      <h3 style="font-size:1.25rem;font-weight:800">Aynı rica, dört farklı ısı</h3>
+      <p style="font-size:.92rem;color:var(--ink2);margin-top:8px">Durum sorularının yarısı ton sorusudur. Alıcının statüsü yükseldikçe bir basamak yukarı çıkın.</p>
+      <table>
+        <thead><tr><th>Basamak</th><th>Biçim</th><th>Nerede kullanılır</th></tr></thead>
+        <tbody>
+          <tr><td>Emir</td><td>"Send me the report."</td><td>Yalnızca çok acil ve eşit-statü; sınavda genelde çeldirici.</td></tr>
+          <tr><td>Soru</td><td>"Can you send me the report?"</td><td>Günlük kayıt; yakın iş arkadaşları.</td></tr>
+          <tr><td>Kibar soru</td><td>"Could you possibly send the report?"</td><td>Yabancı, üst statü, müşteri.</td></tr>
+          <tr><td>Çekingen</td><td>"I was wondering if you might be able to send the report."</td><td>Kibarlık tavanı; profesör, resmî e-posta.</td></tr>
+        </tbody>
+      </table>
+      <div class="exbox">Retlerde de aynı merdiven işler: "No." → "I\u2019m afraid I can\u2019t." → "I\u2019d love to, but…". Kökte <b>"politely"</b> görürseniz bir basamak yukarı çıkın: 15. sorunun doğru şıkkı dördüncü basamaktadır, A şıkkı birinci basamaktadır.</div>
+    </div>
+
+    <!-- Soru kökü anatomisi -->
+    <div class="modalmod reveal">
+      <p class="h-mini" style="color:var(--ink)">Ek Modül · Soru Kökü Anatomisi</p>
+      <h3 style="font-size:1.25rem;font-weight:800">Bu iki türün kökleri standarttır — görevi kökten okuyun</h3>
+      <table>
+        <thead><tr><th>Yaygın kök (İngilizce)</th><th>Türkçe karşılığı ve uyarısı</th></tr></thead>
+        <tbody>
+          <tr><td>Complete the following dialogue. / (Ayşe): ----</td><td>Karşılıklı konuşmayı tamamlayınız — boş SATIR, konuşmacının sırasıdır.</td></tr>
+          <tr><td>Find the sentence that best fills the blank.</td><td>Boşluğu "en iyi" dolduran cümle: içerik + işlev + ton birlikte.</td></tr>
+          <tr><td>Situation: (I) … (II) … (III) …</td><td>Durum: numaralı olguların TAMAMI kısıttır; birine uyan şık tuzaktır.</td></tr>
+          <tr><td>Which of the following would you say to …?</td><td>… kişiye hangisini SÖYLERSİNİZ — alıcı ve kanal şıkka yazılmalıdır.</td></tr>
+          <tr><td>What would be the most appropriate reply?</td><td>"Appropriate" = işlev doğru + ton doğru + kapsam doğru; üçü bir arada.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 02 İŞLEV LAB ═══════════ -->
+<section id="fnlab">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="no">§02</span>
+      <h2>İşlev Lab — Konuşma Eylemi Simülatörü</h2>
+      <p class="d">İfadeyi gör, hangi konuşma eylemini (özür, teklif, uyarı…) gerçekleştirdiğini teşhis et. 16 gerçek kalıp üzerinde refleks kazanın.</p>
+    </div>
+    <div class="lab reveal">
+      <div class="lab-grid">
+        <div>
+          <div class="rootcard">
+            <p class="lbl" id="simCount">İFADE 1 / 16</p>
+            <p class="root" id="simRoot">Yükleniyor…</p>
+            <p class="tr" id="simTr"></p>
+          </div>
+          <div class="catbtns" id="simBtns"></div>
+          <div class="simfb" id="simFb">
+            <p class="verdict" id="simVerdict"></p>
+            <p id="simNote"></p>
+          </div>
+          <div style="margin-top:16px">
+            <button class="btn small" id="simNext">Sıradaki ifade <svg class="ic" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="simside">
+          <div class="simstat"><b id="simScore">0</b><span>doğru teşhis</span></div>
+          <div class="simstat"><b id="simStreak">0</b><span>güncel seri</span></div>
+          <div class="simstat"><b id="simBest">0</b><span>en iyi seri</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 03 DENEME ═══════════ -->
+<section id="deneme">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="no">§03</span>
+      <h2>Özgün Deneme</h2>
+      <p class="d">Bölüm A: diyalog solda, sorular sağda — paneller bağımsız kayar, boşluk rozetine tıklayınca soruya atlar. Bölüm B: her kartta DURUM ⇄ ŞIKLAR yan yana. Satırlara/kaleme tıklayarak mavi vurgu ekleyin.</p>
+    </div>
+    <div class="legend reveal" id="legend"></div>
+    <div id="exam"></div>
+    <p class="footnote">Not: Paylaşılan iki PDF yalnızca Reading bölümü içerdiğinden, bu bölümün diyalog ve durum soruları setin ÖSYM tarzına uygun biçimde bu sayfa için yazılmıştır; şık dağılımı dengelidir (A×5 · B×5 · C×4 · D×5 · E×5). Kendi sorularınızı <b>DLGS</b> ve <b>QUESTIONS</b> dizilerine aynı yapıyla ekleyerek kullanabilirsiniz.</p>
+  </div>
+</section>
+
+<!-- ═══════════ 04 KARNE ═══════════ -->
+<section id="karne">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="no">§04</span>
+      <h2>Karne</h2>
+      <p class="d">İlerlemeniz bu tarayıcıda saklanır (localStorage) — sayfayı kapatıp geri dönseniz bile kaybolmaz.</p>
+    </div>
+    <div class="bignum-row reveal">
+      <div class="bignum"><b id="rDone">0</b><span>Çözülen / 24</span></div>
+      <div class="bignum"><b id="rRight" style="color:var(--ok)">0</b><span>Doğru</span></div>
+      <div class="bignum"><b id="rWrong" style="color:var(--bad)">0</b><span>Yanlış</span></div>
+      <div class="bignum"><b id="rPct">%0</b><span>Başarı</span></div>
+    </div>
+    <div id="reportBars" class="reveal"></div>
+    <div class="report-msg" id="reportMsg">Henüz veri yok — denemenin ilk sorusuyla başlayın.</div>
+    <div class="reset-row">
+      <button class="btn small ghost" id="resetBtn"><svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 2.8-6.5"/><polyline points="3 4 3 10 9 10"/></svg> Karnemi sıfırla</button>
+      <div class="confirmbox" id="confirmBox">
+        <span style="font-size:.85rem;font-weight:700">Tüm cevaplar silinecek. Emin misiniz?</span>
+        <button class="btn small" id="confirmYes">Evet, sıfırla</button>
+        <button class="btn small ghost" id="confirmNo">Vazgeç</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 05 ÇALIŞMA KÂĞIDI ═══════════ -->
+<section id="calisma">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="no">§05</span>
+      <h2>Çalışma Kâğıdı</h2>
+      <p class="d">Denemenin baskıya hazır A4 hâli: öğrenci nüshası (Bölüm A + Bölüm B) ve öğretmen anahtarı.</p>
+    </div>
+    <div class="ws-bar reveal">
+      <button class="btn" id="wsPrint"><svg class="ic" viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Kâğıdı yazdır (PDF)</button>
+      <button class="btn ghost" id="wsKeyBtn">Anahtarı göster</button>
+      <button class="btn ghost" id="wsPrintKey">Sadece anahtarı yazdır</button>
+    </div>
+    <p class="ws-note reveal">Kâğıt A4 boyutunda, her diyalog ve Bölüm B ayrı sayfada başlayacak şekilde dizilmiştir (sayfa sonu CSS ile otomatik). "Kâğıdı yazdır" tarayıcının yazdırma penceresini açar; hedef olarak <b>PDF olarak kaydet</b> veya yazıcı seçin, kenar boşluklarını varsayılan bırakın. Anahtar kapalıyken yazdırırsanız yalnızca öğrenci sayfaları çıkar; <b>"Sadece anahtarı yazdır"</b> ile anahtarı ayrıca basabilirsiniz.</p>
+
+    <div class="ws-doc reveal" id="wsDoc">
+      <div class="ws-cover">
+        <div class="ws-hatch"></div>
+        <div class="ws-top">
+          <span class="ws-mark">D</span>
+          <span>OPA FLUENT · YDT DİYALOG & DURUM LAB</span>
+          <span class="ws-tr">YDT · YDS · YÖKDİL</span>
+        </div>
+        <h2 class="ws-title">Dialogue & Situation</h2>
+        <p class="ws-sub">Özgün Deneme · Çalışma Kâğıdı (Worksheet)</p>
+        <p class="ws-ed">Bölüm A: 6 Diyalog × 2 Boşluk · Bölüm B: 12 Durum · Önerilen Süre: 40 Dakika</p>
+
+        <div class="ws-id">
+          <span>Adı Soyadı <i></i></span>
+          <span>Sınıf / Kurs <i class="w-sm"></i></span>
+          <span>Tarih <i class="w-sm"></i></span>
+          <span>Puan <i class="w-sm"></i> / 24</span>
+        </div>
+
+        <div class="ws-inst">
+          <b>Açıklamalar</b>
+          <ol>
+            <li>Bu çalışma kâğıdı, 6 karşılıklı konuşmada (12 soru) ve 12 durum sorusunda olmak üzere <b>24 sorudan</b> oluşur. Önerilen süre 40 dakikadır.</li>
+            <li><b>Bölüm A</b>'da boşluklar ① ve ② ile numaralandırılmıştır. Boşluğu en iyi tamamlayan ifadeyi bulun ve cevap tablosunda ilgili harfi daire içine alın.</li>
+            <li><b>Bölüm B</b>'de (I), (II), (III) ile verilen olguların <b>tamamı</b> kısıttır: yalnız birine uyan, sebep veya alıcıyı değiştiren şıklar çeldiricidir.</li>
+            <li>Konuşmacıların statü ve yakınlık ilişkisine (resmî / günlük kayıt) dikkat ediniz; kibarlık, işlev kadar önemlidir.</li>
+            <li>Net hesabı yapmak isterseniz 4 yanlış 1 doğruyu götürür.</li>
+          </ol>
+        </div>
+
+        <div class="ws-answrap">
+          <p class="ws-at">Cevap Tablosu — doğru şıkkın harfini daire içine alınız</p>
+          <table class="ws-ans" id="wsAns"></table>
+        </div>
+
+        <div class="ws-rub">
+          <b>Puanlama Rehberi (24 üzerinden)</b>
+          <table>
+            <tr><td>22 – 24</td><td>Hedef seviye: süreyi kısarak (30 dk) tekrar deneyin.</td></tr>
+            <tr><td>18 – 21</td><td>İyi: hatalı becerinin "Tuzak Alanı" dersini tekrar edin.</td></tr>
+            <tr><td>13 – 17</td><td>Gelişiyor: İşlev Lab'ı (§02) bitmeden tekrar gelmeyin.</td></tr>
+            <tr><td>0 – 12</td><td>Temel: §01 derslerini sırayla işleyip tekrar deneyin.</td></tr>
+          </table>
+        </div>
+
+        <p class="ws-credit">Opa Fluent Yayınları · Dialogue & Situation · ÖSYM tarzına uygun özgün içerik</p>
+      </div>
+      <!-- Diyaloglar, durum soruları ve anahtar JS ile eklenir -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer id="iletisim">
+  <div class="wrap">
+    <div>
+      <h5>Kaynak & Künye</h5>
+      <p>Yaklaşım iskeleti: <span class="fl">Reading Soru Kökleri ve Soru Çözüm Yaklaşımları Kitaplığı</span> (Opa Fluent) · Soru üslubu referansı: <span class="fl">Dr. Bünyamin Aksoy — Reading Comprehension Master Set</span>. Bu sayfadaki diyalog ve durum soruları, aynı ÖSYM formatına uygun olarak site için özgün yazılmıştır (24 soru · dengeli şık dağılımı).</p>
+      <p style="margin-top:12px">www.opafluent.com · @opafluent · @opafluentexams · +90 531 561 75 22</p>
+    </div>
+    <div>
+      <h5>GitHub → Netlify Dağıtımı</h5>
+      <div class="deploy">
+        <ol>
+          <li>Bu dosyayı <code>index.html</code> adıyla bir GitHub deposuna ekleyin.</li>
+          <li>Netlify'da <code>Add new site → Import an existing project</code> ile repo'yu bağlayın.</li>
+          <li>Build command: <b>yok</b> · Publish directory: <b>kök dizin</b>. Alternatif: <code>Deploy manually</code> ile dosyayı sürükleyip bırakın.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="wrap"><div class="footrow"><span>YDT DİYALOG & DURUM LAB · OPA FLUENT</span><span>TEK DOSYA · DERLEME GEREKMEZ</span></div></div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   VERİ KATMANI
+   ════════════════════════════════════════════════════════════ */
+const CATS = {
+  coh: {no:'01', name:'Diyalog Bütünlüğü', en:'Dialogue Coherence & Turn-Taking', color:'#C13F14'},
+  fn:  {no:'02', name:'İşlev Tanıma',      en:'Speech-Act Recognition',          color:'#0E7568'},
+  reg: {no:'03', name:'Ton & Üslup',       en:'Register & Politeness',            color:'#8F6400'},
+  con: {no:'04', name:'İçerik Uyumu',      en:'Content Fit',                      color:'#8E2D5A'},
+  sit: {no:'05', name:'Durum Analizi',     en:'Situation Decoding',               color:'#221B14'},
+  log: {no:'06', name:'Mantık & Niyet',    en:'Logic, Intent & Hedging',          color:'#5B3E96'},
+};
+
+const LESSONS = [
+  { cat:'coh', title:'Diyalog Bütünlüğü ve Sıra Mantığı', en:'Dialogue Coherence',
+    roots:[
+      ['Soru–cevap eşleşmesi','"Why?" → sebep; "When?" → zaman; "Are you…?" → Yes/No + açıklama. Boşluğu İZLEYEN satır, cevabın türünü ihbar eder.'],
+      ['Zamir geri izi','Boşluktan SONRAKİ "it / them / there / that" → boşluktaki ya da önceki satırdaki isme bağlanır; ad-referansı İLERİYE kurulamaz.'],
+      ['Dönüş sinyalleri','"So / Then / Actually / Well / Of course" yeni dönüşün yönünü gösterir; "Of course" ve "Sure" genelde bir RİCA\u2019ya verilir.'],
+      ['Yön (kim → kime)','Rica mı teklif mi? "Could you…?" (karşıdan isteme) ile "Shall I…?" (kendin önerme) karışmaz.'],
+    ],
+    steps:[
+      'Boşluğun ÖNCEKİ ve özellikle <b>SONRAKİ</b> satırını iki kez okuyun — cevap, sorunun şeklini almak zorundadır.',
+      'İkinci konuşmacının cevabındaki somut anahtarları (olay, eşya, isim, saat) boşluğa taşıyın; taşınmayan bilgi, uydurma şık demektir.',
+      'Zamir ve zaman uyumunu tarayın: boşluktaki "it" sonraki satırda yeni bir isim doğuruyorsa sıra bozuktur.',
+      'Yön tuzağını sorun: bu cümleyi bu konuşmacı, bu noktada, bu YÖNDE söylemelidir — rol değişimi çeldiricidir.',
+    ],
+    trap:{t:'Yöndeşme Tuzağı', d:'5. sorunun E şıkkı ("Would you like me to finish it for you?") Merve\u2019nin ağzından çıkar ama teklif etmesi gereken Onur\u2019dur — rolleri ters çeviren şık, metinle ne kadar uyumlu görünürse görünsün elenir. Boşluğu doldurmadan önce kimin İSTEDİĞİNİ, kimin TEKLİF ETTİĞİNİ adlandırın.'}
+  },
+  { cat:'fn', title:'İşlev Tanıma: Söz Edimi Okuma', en:'Speech-Act Recognition',
+    roots:[
+      ['Apology (özür)','"I\u2019m (so/terribly) sorry; I do apologize; My apologies"'],
+      ['Offer (teklif)','"Shall I…?; Would you like a hand?; Let me…"'],
+      ['Request (rica)','"Could you (possibly)…?; Would you mind -ing…?"'],
+      ['Suggestion (öneri)','"Why don\u2019t we…?; How about -ing…?; I think we should…"'],
+      ['Warning (uyarı)','"Be careful; Mind the…; I wouldn\u2019t… if I were you"'],
+      ['Congratulation / Sympathy','"Well done — you deserve it!" / "I\u2019m so sorry to hear that."'],
+      ['Polite refusal (nazik red)','"I\u2019d love to, but…; I\u2019m afraid I can\u2019t"'],
+    ],
+    steps:[
+      'Kökteki görev fiilini daire içine alın: <b>decline politely</b> (kibarca red), <b>warn</b> (uyar), <b>offer</b> (teklif), <b>console</b> (avut).',
+      'Doğru şık yalnızca konuyla DEĞİL, o <b>işlevi YAPARAK</b> ilgili olmalı: alerjiden söz etmek ≠ alerjiyi bildirmek.',
+      'İşlevin yönünü kontrol edin: özür mü açıklama mı? öneri mi emir mi? davet mi rica mı?',
+      'İşlev + içerik + ton üçlüsü aynı şıkta birleşmeli; ikisi tutan şık "yarı-doğru" çeldiricidir.',
+    ],
+    trap:{t:'Yakın İşlev Tuzağı', d:'21. sorunun B şıkkı "Nut allergies can be very dangerous" der: konu alerjidir ama İŞLEV (misafirin alerjisini ev sahibine BİLDİRMEK) yerine getirilmemiştir. Konu doğruluğu, işlev eksikliğini asla örtmez — görev fiilini şıkta fiil olarak arayın.'}
+  },
+  { cat:'reg', title:'Ton, Üslup ve Kibarlık Düzeyi', en:'Register & Politeness',
+    roots:[
+      ['Arkadaş (informal)','"Can you…?; Fancy coming?; No worries; Count me in"'],
+      ['İş ilişkisi (neutral)','"Could you…?; That\u2019s fine; Thanks for sorting it out"'],
+      ['Profesör / resmî (formal)','"I was wondering whether… might be possible; I would appreciate it if…"'],
+      ['Kibar ret (tüm düzeyler)','"I\u2019m afraid I can\u2019t; I\u2019d love to, but…"'],
+      ['Yumuşatıcılar','"I\u2019m afraid; I hate to bother you; just so you know; a little / quite / rather"'],
+    ],
+    steps:[
+      'Statü farkını çıkarın: müşteri–garson, öğrenci–profesör, komşu–komşu — her ilişkinin bir ton tabanı vardır.',
+      'Emir yerine soru: "Send me…" → "Could you send…?" — acil durumda bile soru formu güvenlidir.',
+      'Yumuşatıcıları tanıyın ve şıklarda tarayın: yumuşatıcısız sert cümleler niyetle çelişir.',
+      'Niyet (genelde III. olgu) tonu belirler: "çatışmadan kaçın" isteniyorsa tehdit, ironi ve suçlama otomatik elenir.',
+    ],
+    trap:{t:'Emir ve İroni Tuzağı', d:'17. sorunun C şıkkı ("Great party last night — I couldn\u2019t sleep at all!") mesajı ironiye gömer: komşu bunu iltifat sanabilir. Kibarlıkta belirsizlik riskli bir silahtır — şikâyetinizi somut taleple (kulaklık, saat) açıkça birleştirin.'}
+  },
+  { cat:'con', title:'İçerik Uyumu: Durumun Somut Verileri', en:'Content Fit',
+    roots:[
+      ['Sebep verileri','(I)–(II)\u2019deki olgu (fırtına, hastalık, yağmur) doğru şıkkın gerekçesinde AYNEN yer almalı; "work / boring" gibi ikame = tahrif.'],
+      ['Tarih / yer / kişi','Cuma, Bursa, gelin, misafir… — şıkta bu somutluklardan biri eksikse bilgi yarım iletilmiş olur.'],
+      ['Kısıt (constraint)','"without blaming / without embarrassing" gibi sınırlar, şıkkın tonunu biçimlendirmek ZORUNDADIR.'],
+    ],
+    steps:[
+      '(I)–(II)–(III) olgularını tek tek altını çizin; her biri için şıkda karşılık arayın.',
+      'Eksik bilgi = genel geçer cümle tuzağı; fazla bilgi (kapsam şişirme) = kitle hatası.',
+      'Sebep değişimi en sık tahriftir: metin "storm" der, şık "work" derse şık elenir.',
+    ],
+    trap:{t:'Genelleme Tuzağı', d:'"Alerjiler tehlikelidir" doğru genel bilgidir; ama durumun bilgisi "misafirin alerjisidir". Somut olmayan doğru cümleler, somut gereken cevapları asla yenmez — geniş doğrular, dar görevleri örtmez.'}
+  },
+  { cat:'sit', title:'Durum Analizi: Kim, Kime, Nerede, Hangi Kanalda', en:'Situation Decoding',
+    roots:[
+      ['Konuşmacı rolü','Siz hasta mısınız, müşteri mi, öğretmen mi? Rol, cümlenin yönünü ve yetkisini belirler.'],
+      ['Hedef kitle','Söylediğiniz kişi durumdaki alıcı mı (gelin, komşu, resepsiyon)? Yanlış alıcı = anında eleme.'],
+      ['Kanal','Yüz yüze / telefon / e-posta — e-posta resmî kayıt ister, telefon kısa ve duygusal olabilir.'],
+      ['Özel bağlam','Düğün, klinik, iş toplantısı… alanın kayıt normu (Ders 03) ile çarpışmamalı.'],
+    ],
+    steps:[
+      'Önce KIME söylediğinizi sorun: şık doğru kişiye mi hitap ediyor?',
+      'Kanal-uyumu kontrol edin: resmî e-postada "Give me…" imkânsızdır.',
+      'Rol karmaşalarını avlayın: "my wedding" diyen şık, düğün kimin olduğunu çarpıtıyorsa elenir.',
+    ],
+    trap:{t:'Yanlış Kitle Tuzağı', d:'19. sorunun C şıkkı "Is there anything the airline can do?" der — bu soru havayoluna sorulacak bir soruyu GELİNe sorar. Kitle uyumsuzsa içerik ne kadar akıcı olursa olsun şık düşer: alıcıyı yanlış adresseden cümle, en doğru bilgiyi bile teslim edemez.'}
+  },
+  { cat:'log', title:'Mantık, Niyet ve Ölçülülük', en:'Logic, Intent & Hedging',
+    roots:[
+      ['Nazik muhalefet','"I see your point, but…; X is useful, but I think…" — onay + ama + alternatif.'],
+      ['Süreç dili (kişisiz sebep)','"The main issue was communication" ≠ "some people are lazy" — sebep kişiye değil mekanizmaya bağlanır.'],
+      ['Derece niteleyicileri','"a little / rather / quite / surely / never / worst" — ölçüsüz dereceler niyetle çelişir.'],
+      ['Kapsam ölçüsü','Niyet "kendin için" derse şık "herkes için" isteyemez; kapsam şişirme = yetki aşımı.'],
+    ],
+    steps:[
+      'Niyet cümlesini (genelde III) fiil fiil şıkka taşıyın: "warn" → uyarı fiili, "disagree politely" → muhalefet kalıbı.',
+      'Mutlak ve uç ifadeleri ("never", "worst", "always", "clearly") görünce niyetle karşılaştırın.',
+      'Sebep-sonuç yönünü doğrulayın: şıkkın gerekçesi, durumun gerekçesiyle aynı yönde mi akıyor?',
+    ],
+    trap:{t:'Uç Niyet Tuzağı', d:'Niyet ölçülüyse şık da ölçülü olmak zorundadır: 24. sorunun A şıkkı ("worst idea I\u2019ve heard all year") ve 23. sorunun C şıkkı (uydurma "unrealistic deadline" sebebi) niyet cümlesini çiğner. Kibarlık bir ton değil, bir MANTIK kuralıdır.'}
+  },
+];
+
+/* ---- İşlev Lab: 8 işlev × 16 ifade ---- */
+const FUNCS = {
+  ap: {name:'Özür / Telafi',      color:'#C13F14'},
+  rf: {name:'Nazik Ret',          color:'#0E7568'},
+  rq: {name:'Rica / İstek',       color:'#8F6400'},
+  of: {name:'Teklif',             color:'#8E2D5A'},
+  sg: {name:'Öneri / Tavsiye',    color:'#5B3E96'},
+  inv:{name:'Davet / Ayarlama',   color:'#23608F'},
+  wr: {name:'Uyarı / Şikâyet',    color:'#7A4A21'},
+  sup:{name:'Tebrik / Destek',    color:'#6E3E75'},
+};
+const FNITEMS = [
+  {en:'I\u2019m terribly sorry — I completely forgot about our meeting. Shall we reschedule?', tr:'Toplantımızı tamamen unuttum; yeniden ayarlasak nasıl olur?', fn:'ap', note:'"I\u2019m terribly sorry" + "forgot" = özür; "Shall we reschedule?" telafi önerisi — özür+telafi paketi.'},
+  {en:'That sounds lovely, but I\u2019m afraid I\u2019m working that night.', tr:'Çok isterim ama o akşam çalışıyorum.', fn:'rf', note:'"but I\u2019m afraid" + somut sebep = nazik red; "That sounds lovely" yumuşatıcı ön-beğeni.'},
+  {en:'Would you mind closing the window? It\u2019s a bit drafty in here.', tr:'Pencereyi kapatır mısın? Burası biraz havalı.', fn:'rq', note:'"Would you mind + -ing" en kibar rica kalıplarından; "a bit" hafifletici.'},
+  {en:'Those boxes look heavy — shall I take a couple of them for you?', tr:'O kutular ağır görünüyor; birkaçını senin için taşıyabilir miyim?', fn:'of', note:'"Shall I…?" gönüllü teklif; gözlem cümlesi teklifi doğallaştırır, reddetme hakkı açık bırakır.'},
+  {en:'Why don\u2019t we try the new place on the corner for lunch?', tr:'Öğle yemeği için köşedeki yeni mekânı denesek?', fn:'sg', note:'"Why don\u2019t we…?" öneri kalıbı; somut öneri nesnesi (new place) öneriyi gerçek kılar.'},
+  {en:'We\u2019re having a little get-together on Friday — are you free?', tr:'Cuma küçük bir toplantı düzenliyoruz; mısait misin?', fn:'inv', note:'Davet + uygunluk sorgusu; "get-together" günlük kayıtlı davet sözcüğü.'},
+  {en:'I wouldn\u2019t touch that rail if I were you — the paint hasn\u2019t dried.', tr:'O korkuluğa dokunmazdım — boya kurumadı.', fn:'wr', note:'"I wouldn\u2019t… if I were you" klasik uyarı kalıbı + somut gerekçe.'},
+  {en:'Congratulations! I always knew you\u2019d win that scholarship.', tr:'Tebrikler! Bursu kazanacağını baştan biliyordum.', fn:'sup', note:'"Congratulations" + geçmişe dönük güven ("I always knew") = samimi tebrik.'},
+  {en:'I\u2019m so sorry to hear about your grandmother — how are you holding up?', tr:'Büyükannen için çok üzüldüm; dayanabiliyor musun?', fn:'sup', note:'"Sorry to hear" baş sağlığı; "how are you holding up" dayanma sorusu = destek.'},
+  {en:'I hate to bring this up, but the noise after midnight has been really disturbing.', tr:'Bunu açmak istemiyorum ama gece yarısından sonraki gürültü gerçekten rahatsız edici.', fn:'wr', note:'"I hate to bring this up" şikâyet öncesi yumuşatıcı; somut saat + etki tanımı ("disturbing").'},
+  {en:'That sounds great — count me in!', tr:'Harika görünüyor — ben de varım!', fn:'inv', note:'"Count me in" davete kayıtsız şartsız onay; ayarlama konuşmasını kapatır.'},
+  {en:'I was wondering if you could possibly look over my draft before Friday.', tr:'Taslağıma Cuma\u2019dan önce bakman mümkün olur mu acaba?', fn:'rq', note:'"I was wondering if + could possibly" kibarlık tavanı (merdivenin 4. basamağı) — profesöre uygun.'},
+  {en:'You really should get that cough checked out — it\u2019s been weeks.', tr:'O öksürüğü gerçekten kontrol ettirmelisin — haftalar oldu.', fn:'sg', note:'"should + check out" tavsiye; süre vererek ("it\u2019s been weeks") gerekçelendirme.'},
+  {en:'Help yourself to anything in the fridge while I\u2019m out.', tr:'Ben yokken buzdolabındaki her şeyden istediğin gibi ye.', fn:'of', note:'"Help yourself" ikram teklifi; ev sahibi tonu, karşı tarafa özerklik verir.'},
+  {en:'I\u2019m afraid that won\u2019t be possible — we close at six sharp.', tr:'Korkarım mümkün olmayacak — saat tam altıda kapatıyoruz.', fn:'rf', note:'Kurumsal nazik ret: "I\u2019m afraid" + kural + kesin saat; kişisel değil prosedürel red.'},
+  {en:'Watch out! That pan handle is scorching hot!', tr:'Dikkat et! O tencere kolu cayır cayır yanıyor!', fn:'wr', note:'"Watch out!" ani uyarı — acil durumlarda kibarlık merdiveni geçersizdir; aciliyet doğallığı bozar.'},
+];
+
+/* ---- Diyaloglar (6 konuşma × 2 boşluk) ---- */
+const DLGS = [
+  {title:'A Weekend in the Mountains', meta:'Günlük kayıt · Davet ve görev paylaşımı', blanks:[1,2], lines:[
+    {sp:'Eda',   t:'I was thinking of driving up to the mountains this weekend and doing some camping. ----?'},
+    {sp:'Kaan',  t:'That sounds brilliant! I haven\u2019t been camping since last summer.'},
+    {sp:'Eda',   t:'Great. I\u2019ll borrow my brother\u2019s tent, then. ----?'},
+    {sp:'Kaan',  t:'Sure, I can bring my stove and some tinned food. Just tell me what time we\u2019re setting off.'},
+  ]},
+  {title:'A Word with the Waiter', meta:'Yarı-resmî kayıt · Şikâyet ve kabul', blanks:[3,4], lines:[
+    {sp:'Customer', t:'Excuse me. I\u2019m afraid there\u2019s a problem with my soup. ----'},
+    {sp:'Waiter',   t:'I do apologize. I\u2019ll take it back to the kitchen right away.'},
+    {sp:'Customer', t:'----. I know the kitchen is busy tonight.'},
+    {sp:'Waiter',   t:'Thank you for your understanding. Your soup will be back in five minutes.'},
+  ]},
+  {title:'The Database Deadline', meta:'İş kaydı · Rica ve kibar red', blanks:[5,6], lines:[
+    {sp:'Merve', t:'The manager has asked me to find someone to update the client database this week. ----?'},
+    {sp:'Onur',  t:'I\u2019d love to help, but I\u2019m already drowning in the quarterly reports. ----?'},
+    {sp:'Merve', t:'Of course — the deadline is Friday. If the reports keep you busy, I could ask Deniz instead.'},
+    {sp:'Onur',  t:'That would be great. I\u2019ll help with the database next month, I promise.'},
+  ]},
+  {title:'Rescheduling at the Clinic', meta:'Telefon · Randevu ayarlama', blanks:[7,8], lines:[
+    {sp:'Receptionist', t:'Good morning, Lakeside Dental Clinic. How can I help you?'},
+    {sp:'Patient',      t:'Hello. I have an appointment with Dr. Hughes on Thursday at ten, but something\u2019s come up at work. ----?'},
+    {sp:'Receptionist', t:'Of course. Dr. Hughes also has some slots on Friday morning — would 9:30 suit you?'},
+    {sp:'Patient',      t:'----.'},
+    {sp:'Receptionist', t:'Perfect. I\u2019ll move your appointment and send you a confirmation text.'},
+  ]},
+  {title:'Borrowing the Car', meta:'Kardeş sohbeti · İstek ve koşullu izin', blanks:[9,10], lines:[
+    {sp:'Can',  t:'Are you using the car on Saturday evening?'},
+    {sp:'Elif', t:'No, I don\u2019t need it. Why?'},
+    {sp:'Can',  t:'----'},
+    {sp:'Elif', t:'----'},
+    {sp:'Can',  t:'I promise I\u2019ll have it back by Sunday at the latest, with a full tank.'},
+  ]},
+  {title:'After the Presentation', meta:'Arkadaş · Destek ve öneri', blanks:[11,12], lines:[
+    {sp:'Zeynep', t:'How did your presentation go this morning?'},
+    {sp:'Deniz',  t:'Honestly, not great. I ran out of time and had to skip the whole final section.'},
+    {sp:'Zeynep', t:'----'},
+    {sp:'Deniz',  t:'That\u2019s a good idea. I\u2019ll email her and ask whether I can hand in the conclusion as a written summary.'},
+    {sp:'Zeynep', t:'----'},
+    {sp:'Deniz',  t:'You\u2019re right. Fingers crossed.'},
+  ]},
+];
+
+/* ---- Sorular (24): A×5 · B×5 · C×4 · D×5 · E×5 ---- */
+const QUESTIONS = [
+  /* ══ BÖLÜM A · DİYALOG (1–12) ══ */
+  { id:1, part:'A', d:0, cat:'fn',
+    stem:'The sentence that best completes the blank <em class="kw">①</em> in the dialogue is ----.',
+    clue:'Kaan\u2019ın cevabı ("That sounds brilliant!") bir DAVETE onaydır; boşluk daveti kurmalı.',
+    opts:[
+      ['Have you finished packing already?','"Packing" henüz plan aşamasındaki ("I was thinking") bir yolculuk için erken — zaman uyumu bozuk; "brilliant" cevabı bu soruya verilmez.'],
+      ['Why do you always complain about the city?','Konuşmada şikâyet yok; davet bekleyen satıra suçlama yerleşir — işlev uyumsuz.'],
+      ['You didn\u2019t want to join me last time, did you?','Geçmişe dönük, sitem dolu tag-question; Kaan\u2019ın coşkulu cevabıyla çelişir.'],
+      ['Do you go camping every weekend?','Alışkanlık sorusu sohbeti davete götürmez; "That sounds brilliant" bir alışkanlık sorusuna verilecek cevap değildir.'],
+      ['Do you fancy coming along?','DOĞRU. "Fancy + -ing" günlük kayıtlı davet kalıbı; Kaan\u2019ın "That sounds brilliant!" yanıtı birebir davete onaydır.'],
+    ],
+    ans:4, ev:['d0-l1'],
+    why:'Eda planını açıklıyor; "Do you fancy coming along?" hem kaydı (günlük, arkadaş) hem işlevi (davet) tutar. Kaan\u2019ın coşkulu onayı ("That sounds brilliant! I haven\u2019t been camping since last summer") davet-onsay eşleşmesinin kanıtıdır.',
+    strat:'Diyalogda boşluktan sonraki ilk satır "cevap şablonudur": coşkulu onay → önceki boşluk istek/davet; "Sure" → rica; "That\u2019s a good idea" → öneri. Şablonu sözlüğe çevirin.'},
+  { id:2, part:'A', d:0, cat:'coh',
+    stem:'The sentence that best completes the blank <em class="kw">②</em> in the dialogue is ----.',
+    clue:'"Sure, I can bring my stove" bir RİCAYA onaydır — boşluk, sobayı İSTEMELİ.',
+    opts:[
+      ['Do you happen to know how much a good stove costs?','Fiyat sorusu; "Sure, I can bring my stove" bir fiyat sorusunun cevabı değildir — eşleşme kopar.'],
+      ['Could you bring your camping stove along as well?','DOĞRU. Nazik rica ("Could you…?"); Kaan\u2019ın "Sure, I can bring my stove and some tinned food" yanıtı birebir istek-onay eşleşmesidir.'],
+      ['Is your stove still broken?','Metinde kırık soba yok; "hâlâ kırık mı" varsayımı uydurmadır — varsayım tuzağı.'],
+      ['Should we buy a second tent just in case?','Çadır zaten temin ediliyor ("I\u2019ll borrow my brother\u2019s tent"); öneri durumla çelişir ve soba cevabıyla eşleşmez.'],
+      ['Can I borrow your stove when we get there?','Mantık tersi: soba Kaan\u2019da olacak; ondan "orada ödünç istemek" saçmadır — içerik-tutarlılık hatası.'],
+    ],
+    ans:1, ev:['d0-l3'],
+    why:'"Could you bring your camping stove along as well?" somut bir istek; Kaan "Sure + soba + konserve" ile birebir eşleşir. Ayrıca Eda çadırı üstlendiği için görev paylaşımı doğal bir rica-cevap döngüsü kurar.',
+    strat:'Cevapta geçen her somut nesneyi (stove, tinned food) boşluğa taşıyın: doğru istek o nesneyi istemelidir. Cevapta var olmayan nesne/muhatap içeren şık, uydurma demektir.'},
+  { id:3, part:'A', d:1, cat:'reg',
+    stem:'The sentence that best completes the blank <em class="kw">①</em> in the dialogue is ----.',
+    clue:'Garsonun "I do apologize" özrü, ÖLÇÜLÜ bir şikâyeti izliyor; müşterinin tonu sert değil.',
+    opts:[
+      ['This soup is an absolute insult!','Saldırgan üslup; müşterinin sonraki "I know the kitchen is busy" uzlaştırıcı tavrıyla çelişir — ton zinciri kırılır.'],
+      ['I\u2019d like to cancel my order and leave.','Tiradı kesip gitme; garsonun "back in five minutes" akışıyla çelişir — müşteri kalıyor.'],
+      ['It seems to have gone cold — could you possibly warm it up?','DOĞRU. Sorumlu yumuşatma ("seems to") + "could you possibly" kibarlık; somut sorun net, saldırganlık yok.'],
+      ['Why is your kitchen always so slow?','Genelleyerek mutfağı suçlar; somut sorun (soğuk çorba) kaybolur, ton sertleşir.'],
+      ['Could I see the manager, please?','Yöneticiye başvurma = tırmandırma; müşterinin sakin, anlayışlı tavrıyla uyumsuz.'],
+    ],
+    ans:2, ev:['d1-l1'],
+    why:'"It seems to have gone cold — could you possibly warm it up?" hem sorunu somutlar hem "could you possibly" ile kibarlık tavanını korur: garsonun "I do apologize" özrü bu ölçülü şikâyete doğal karşılıktır.',
+    strat:'Şikâyet diyaloglarında "seems to / appears to / I\u2019m afraid" yumuşatıcılarını arayın; emir ve hakaret barındıran şıklar kibarlık filtresinde elenir. Ton zinciri: yumuşak giriş → kibar özür → zarif kabul.'},
+  { id:4, part:'A', d:1, cat:'reg',
+    stem:'The sentence that best completes the blank <em class="kw">②</em> in the dialogue is ----.',
+    clue:'Boşluktan SONRA "I know the kitchen is busy" geliyor: müşteri ANLAYIŞ göstermeli.',
+    opts:[
+      ['That\u2019s quite all right — these things happen.','DOĞRU. Özrü zarifçe küçümseyip ilişkiyi onarır; garsonun "Thank you for your understanding" teşekkürü birebir karşılıktır.'],
+      ['That\u2019s outrageous — I demand a discount.','Tazminat talebi tırmandırır; "understanding" teşekkürüyle sert çelişki.'],
+      ['You should hire more staff, honestly.','İstenmemiş tavsiye; ton paternalistleşir, kabul işlevi yok.'],
+      ['I never want to eat here again.','Kopuş ilanı; beş dakika sonra çorba dönecek akışla çelişir.'],
+      ['Don\u2019t worry — it\u2019s the cook\u2019s fault anyway.','Üçüncü tarafı suçlamak, garsonun üstlendiği sorumluluğu dağıtır; "kibar kabul" işlevi değil.'],
+    ],
+    ans:0, ev:['d1-l3'],
+    why:'"That\u2019s quite all right — these things happen." özrü kabul edip olayı olağanlaştırır; garsonun "Thank you for your understanding" kapanışı, boşlukta "anlayış" gösterildiğinin doğrudan kanıtıdır.',
+    strat:'Kapanış satırındaki duygu kelimesini boşluğa tercüme edin: "understanding" bekleniyorsa boşlukta anlayış olmalı; tazminat, tehdit veya tavsiye değil. Duygu kelimesi = cevabın izinde.'},
+  { id:5, part:'A', d:2, cat:'coh',
+    stem:'The sentence that best completes the blank <em class="kw">①</em> in the dialogue is ----.',
+    clue:'Onur\u2019un "I\u2019d love to help, but…" cevabı bir GÖREV TALEBİNE verilen kibar redtir — yönü karıştırmayın.',
+    opts:[
+      ['Have you finished the quarterly reports?','Onur\u2019un raporlardan sözü boşluktan SONRA gelir; bilgi boşluğa sızamaz — zaman-sıra hatası.'],
+      ['You were supposed to update the database yourself, weren\u2019t you?','Yönlendirilmiş suçlama; Merve\u2019nin "find someone" göreviyle ve Onur\u2019un kibar tonuyla çelişir.'],
+      ['How many clients do we have in the database?','Sayı sorusu; "I\u2019d love to help, but…" cevabı bir görev teklifine verilir, sayıya değil.'],
+      ['Would you be able to take it on?','DOĞRU. Görevlendirme ricası; Onur\u2019un "I\u2019d love to help, but…" tam bir rica-red cevabıdır.'],
+      ['Would you like me to finish it for you?','Yön-değiştirme: teklifi ONUR yapmalıydı; Merve\u2019nin ağzından teklif rolleri ters çevirir.'],
+    ],
+    ans:3, ev:['d2-l1'],
+    why:'Merve\u2019nin görevi "find someone": "Would you be able to take it on?" doğru yönde ricadır. Onur\u2019un "I\u2019d love to help, but I\u2019m already drowning…" kalıbı, tam da bu ricaya verilen standart kibar red-cümlesidir.',
+    strat:'Boşluğu doldurmadan önce rolleri adlandırın: kim İSTİYOR, kim MUHATAP? "Could you…?" = istek; "Shall I…?" = teklif. Yön tersse şık ne kadar kibar olursa olsun elenir.'},
+  { id:6, part:'A', d:2, cat:'con',
+    stem:'The sentence that best completes the blank <em class="kw">②</em> in the dialogue is ----.',
+    clue:'Merve\u2019nin cevabı iki konuya değiniyor: alternatif kişi (Deniz) + son tarih (Friday).',
+    opts:[
+      ['Who is Deniz, by the way?','Deniz adı henüz hiç geçmedi; ad-referansı boşluktan SONRA kuruluyor — referans-sırası hatası.'],
+      ['Is there anyone else who could do it, or could the deadline be put back a little?','DOĞRU. İki çıkış yolu önerir; Merve\u2019nin cevabı ikisini de karşılar: alternatif (Deniz) + son tarih (Friday).'],
+      ['Why does the manager hate me so much?','Kişiselleştirilmiş paronoya; hem ton hem içerik dışı.'],
+      ['Could I do it next month instead?','"Next month" sözünü Onur KENDİ veriyor (son satır); boşluğa koymak döngüsel ve Merve\u2019nin "Of course — the deadline is Friday" cevabıyla uyumsuz.'],
+      ['Are the quarterly reports due this week too?','Onur raporlarda boğulduğunu kendisi söylüyor; kendi cümlesini sorması tuhaf ve cevap bu soruyu karşılamıyor.'],
+    ],
+    ans:1, ev:['d2-l2'],
+    why:'"Is there anyone else who could do it, or could the deadline be put back a little?" iki kapı birden açar; Merve "Of course — the deadline is Friday… I could ask Deniz instead" ile her iki kapıya da cevap verir. Cevabın iki parçası, boşluğun iki sorusuna denktir.',
+    strat:'Cevap satırında İKİ ayrı konu varsa boşlukta İKİ ayrı çıkış arayın. Ayrıca cevapta ilk kez geçen İSİMLER (Deniz) boşluktan önce gelemez — bu tek filtreyle A şıkkı anında elenir.'},
+  { id:7, part:'A', d:3, cat:'fn',
+    stem:'The sentence that best completes the blank <em class="kw">①</em> in the dialogue is ----.',
+    clue:'"Dr. Hughes also has some slots on Friday" — resepsiyon TARİH DEĞİŞİKLİĞİ konuşuyor.',
+    opts:[
+      ['Can I speak to Dr. Hughes right now?','Doktorla görüşme talebi; "Friday slots" cevabı randevu değişikliği varsayar — eşleşme yok.'],
+      ['Do you do tooth whitening at this clinic?','Yeni hizmet tangent\u2019ı; akış kopar.'],
+      ['How much do appointments cost?','Ücret sorusu; "something\u2019s come up" girişi bir engel bildiriyor, fiyat sormuyor.'],
+      ['I\u2019d like to cancel my appointment for good.','Kalıcı iptal; "something\u2019s come up" = engel var ama gitmek istiyor; akış yeni randevu kuruyor.'],
+      ['Would it be possible to move it to another day?','DOĞRU. "Would it be possible" kibar rica; resepsiyonun "also has some slots on Friday" cevabı birebir tarih değişikliği muhabbetidir.'],
+    ],
+    ans:4, ev:['d3-l2'],
+    why:'"Would it be possible to move it to another day?" kibar erteleme ricası; "something\u2019s come up at work" girişi bu ricanın gerekçesidir ve resepsiyonun çözüm önerisi ("slots on Friday") yalnızca bir taşıma ricasına verilebilir.',
+    strat:'Cevabın ÇÖZÜM TİPİNİ boşluğun isteğine bağlayın: çözüm "başka gün/saat" ise istek "taşı" olmalıdır; "iptal" değil. Çözüm tipi = isteğin aynası.'},
+  { id:8, part:'A', d:3, cat:'coh',
+    stem:'The sentence that best completes the blank <em class="kw">②</em> in the dialogue is ----.',
+    clue:'Kapanış "Perfect. I\u2019ll move your appointment" — hasta TEKLİFİ KABUL etmiş olmalı.',
+    opts:[
+      ['No, Thursday is much better for me, after all.','Cuma 9:30\u2019u reddeder; "Perfect + move" kapanışı bir REDDİN ardından gelemez.'],
+      ['Could I also book a check-up for my son next month?','Yeni rezervasyon tangent\u2019ı; "your appointment" TEKİL kapanışıyla uyumsuz.'],
+      ['In that case, I\u2019ll just keep the Thursday one.','Eski randevuyu koruma kararı; "I\u2019ll move your appointment" ile doğrudan çelişki.'],
+      ['Yes, 9:30 on Friday works fine — thanks for sorting that out so quickly.','DOĞRU. Teklif edilen gün ve saati onaylar; "Perfect + move + confirmation" kapanışı bu onaya karşılıktır.'],
+      ['Do you happen to know whether Dr. Hughes is any good?','Güven sorusu, ayar tamamlandıktan sonra tuhaf; resepsiyon bir ONAY bekliyordu.'],
+    ],
+    ans:3, ev:['d3-l2','d3-l4'],
+    why:'"Yes, 9:30 on Friday works fine…" önerilen dil ve saati onaylar; resepsiyonun "Perfect. I\u2019ll move your appointment" kapanışı ancak bir onaydan sonra söylenebilir. A ve C Perşembe\u2019ye döner — akışla çelişir.',
+    strat:'Diyalogun SON satırı, boşluktaki cümlenin işlevini onaylar: "Perfect / I\u2019ll move / Great" görüyorsanız boşluk ONAY cümlesidir; tereddüt veya red içeremez.'},
+  { id:9, part:'A', d:4, cat:'con',
+    stem:'The sentence that best completes the blank <em class="kw">①</em> in the dialogue is ----.',
+    clue:'Elif "Why?" demiş: Can bir İSTEK + SEBEP sunmalı; kapanıştaki "have it back" sözü ödünç almayı doğrular.',
+    opts:[
+      ['Some friends are throwing an engagement party in Bursa on Saturday, so I was wondering if I could borrow the car.','DOĞRU. Sebep + "I was wondering if" kibar ricası; Can\u2019ın kapanıştaki dönüş ve depo sözü bu ricanın karşılığıdır.'],
+      ['By the way, I\u2019m selling the car next week.','Araba Elif\u2019in; satış ilanı hem mülkiyeti hem niyeti çiğner.'],
+      ['Do you know how to change a tyre?','Beceri sorusu "Why?"ye cevap değil; sonraki koşullu izin akışını kurmaz.'],
+      ['Your driving test is on Saturday, isn\u2019t it?','Elif\u2019in sınavı yok; uydurma bilgi + yanlış yönlendirme.'],
+      ['I crashed the car last night — long story.','Kara mizah; kapanıştaki "I\u2019ll have it back by Sunday, with a full tank" (araba sağlam) sözüyle çelişir.'],
+    ],
+    ans:0, ev:['d4-l1','d4-l4'],
+    why:'"Some friends are throwing an engagement party in Bursa… I was wondering if I could borrow the car." hem "Why?" sorusunu cevaplar (sebep) hem kibar bir ödünç ricası kurar; Can\u2019ın son satırdaki dönüş+depo taahhüdü bu ricanın doğal karşılığıdır.',
+    strat:'Diyalogdaki "Why?" cevapsız kalamaz: doğru şık mutlaka bir GEREKÇE içerir. Sebep içermeyen şıklar elenir; abartılı mizah (E) tonu, kibarlık dengesini bozar.'},
+  { id:10, part:'A', d:4, cat:'coh',
+    stem:'The sentence that best completes the blank <em class="kw">②</em> in the dialogue is ----.',
+    clue:'Can\u2019ın son satırı ("back by Sunday, full tank") Elif\u2019in koşullarına VERİLEN CEVAHTIR: izin + koşul olmalı.',
+    opts:[
+      ['Absolutely not — you crashed it last time.','Geçmiş kaza metinde yok (uydurma); Can\u2019ın huzur içinde verdiği söz bu sert redle uyumsuz.'],
+      ['Sure, take it — and don\u2019t bother refuelling.','"Don\u2019t bother refuelling" Can\u2019ın "with a full tank" sözüyle doğrudan çelişir.'],
+      ['You can take it, but please drive carefully — and try to be back before it gets too late on Sunday.','DOĞRU. Koşullu izin; Can\u2019ın "back by Sunday at the latest, with a full tank" kapanışı iki koşula da (dikkat + dönüş saati) karşılık verir.'],
+      ['Only if you take me to the party with you.','Koşul Can\u2019ı partiye götürmeye bağlar; Can\u2019ın cevabı bu koşula hiç değinmez — eşleşme kopar.'],
+      ['Why don\u2019t you take Dad\u2019s car instead?','Alternatif öneri; Can\u2019ın "I\u2019ll have it back" (BU arabayı ödünç aldığı) sözüyle çelişir.'],
+    ],
+    ans:2, ev:['d4-l4'],
+    why:'"You can take it, but please drive carefully — and try to be back before it gets too late on Sunday." koşullu izindir; Can\u2019ın kapanış taahhüdü ("by Sunday at the latest, with a full tank") tam da bu koşullara verilen cevaptır. Boşluktaki her koşul, kapanışta bir taahhüt bulmalıdır.',
+    strat:'Son satırı "sözleşme metni" gibi okuyun: kapanışta üstlenilen her taahhüt (dikkat, saat, depo) önceki boşlukta bir koşul olarak istenmiş olmalı. Karşılıksız taahhüt = eksik şık.'},
+  { id:11, part:'A', d:5, cat:'fn',
+    stem:'The sentence that best completes the blank <em class="kw">①</em> in the dialogue is ----.',
+    clue:'Deniz\u2019in cevabı "That\u2019s a good idea" + e-posta planı: Zeynep bir ÇÖZÜM ÖNERMİŞ olmalı.',
+    opts:[
+      ['I told you this presentation would be a disaster.','Sonradan akıllılık ve suçlama; "That\u2019s a good idea" bir öneriye verilir, taşlamaya değil.'],
+      ['Congratulations on finishing early!','Zıt-okuma: "ran out of time" erken bitiş değil, süre yetmemesidir; tebrik işlevi durumu ters okur.'],
+      ['How long was the presentation supposed to be?','Akla yakın tangent; ama Deniz\u2019in "That\u2019s a good idea. I\u2019ll email her…" cevabı bir E-POSTA ÖNERİSİNE karşılıktır, süre sorusuna değil.'],
+      ['Oh no — that\u2019s frustrating. But why don\u2019t you ask her if you could submit the rest in writing?','DOĞRU. Destek ("Oh no") + çözüm önerisi; Deniz bunu "That\u2019s a good idea" diye onaylar ve uygular.'],
+      ['You should have prepared better, obviously.','Geçmişe dönük suçlama; destek işlevini tamamen yok sayar.'],
+    ],
+    ans:3, ev:['d5-l1','d5-l3'],
+    why:'"Oh no — that\u2019s frustrating. But why don\u2019t you ask her if you could submit the rest in writing?" önce duygudaşlık kurar, sonra çözüm önerir; Deniz\u2019in "That\u2019s a good idea. I\u2019ll email her…" cevabı öneri-onay eşleşmesinin birebir kanıtıdır.',
+    strat:'"That\u2019s a good idea" kalıbını görün: önceki boşluk MUTLAKA öneri cümlesidir. Onay kalıplarını sözlüğe çevirin: "good idea" → öneri; "Sure" → rica; "I do apologize" → şikâyet.'},
+  { id:12, part:'A', d:5, cat:'reg',
+    stem:'The sentence that best completes the blank <em class="kw">②</em> in the dialogue is ----.',
+    clue:'Deniz "You\u2019re right. Fingers crossed." ile rahatlıyor: Zeynep GÜVENCE vermiş olmalı.',
+    opts:[
+      ['Don\u2019t worry too much — she\u2019ll surely appreciate the effort, and it happens to everyone.','DOĞRU. Umut aşıyan destek cümlesi; "Fingers crossed" iyimserliği ancak böyle bir cümle üretir.'],
+      ['I doubt she\u2019ll even read your email.','Karamsarlık aşılar; "You\u2019re right" onayı bir umut cümlesine verilir.'],
+      ['Make sure you blame the previous speaker for taking up your time.','Üçüncü tarafı suçlama tavsiyesi; dürüstlük temelli desteği çürütür.'],
+      ['Why are you telling me all this, anyway?','İlgisizlik; arkadaş içi destek işlevi çöker.'],
+      ['Professors never accept anything late.','"Never" mutlağı; Deniz\u2019in hâlâ umutlu kapanışı ("Fingers crossed") ile çelişir.'],
+    ],
+    ans:0, ev:['d5-l5'],
+    why:'"Don\u2019t worry too much — she\u2019ll surely appreciate the effort…" güvence verir; Deniz\u2019in "You\u2019re right. Fingers crossed." rahatlaması bu tona karşılıktır. Karamsar ve mutlak şıklar (B, E) umutlu kapanışla çelişir.',
+    strat:'Kapanıştaki duygusal sinyal (rahatlama, umut) boşluğun tonunu belirler: "I doubt", "never" taşıyan şıklar pozitif kapanışla çelişir. Ton, kelime seçiminden fazlasını söyler.'},
+
+  /* ══ BÖLÜM B · DURUM (13–24) ══ */
+  { id:13, part:'B', cat:'reg',
+    facts:[
+      'Your classmates have organized a picnic in the park for Saturday afternoon.',
+      'You have already promised to spend that day with your grandmother, who has not been well lately.',
+      'You want to decline the invitation without hurting anyone\u2019s feelings.',
+    ],
+    stem:'Which of the following would you say to <em class="kw">decline the invitation politely</em>?',
+    clue:'(III) "without hurting anyone\u2019s feelings" — kibar red formülü: beğeni + sebep + iyi dilek.',
+    opts:[
+      ['I\u2019d rather spend Saturday with my grandmother — picnics are boring anyway.','Red var ama planı küçük düşürür; "zarar vermeden" niyetiyle çelişir.'],
+      ['Maybe some of you could come to my grandmother\u2019s place instead?','Planı kendi programına göre değiştirme teklifi; sosyal olarak garip, niyet dışı.'],
+      ['Why do you always arrange things when I\u2019m busy?','Suçlayıcı "always"; davetkârlığı incitir.'],
+      ['I can\u2019t come, but I\u2019d rather not say why.','Sebebi saklamak arkadaş çevresinde soğuk yaratır; kibar redin özü (sebep + iyi dilek) eksik.'],
+      ['That sounds lovely, but I\u2019ve promised to spend Saturday with my grandmother — I hope you all have a wonderful time!','DOĞRU. Hayranlık + nazik red + sebep + iyi dilek: kibar red dörtlüsünün tamamı.'],
+    ],
+    ans:4, ev:['s13-f0','s13-f1','s13-f2'],
+    why:'E şıkkı üç parçayı da taşır: "That sounds lovely" (beğeni) + "I\u2019ve promised to visit my grandmother" (somut sebep) + "have a wonderful time" (iyi dilek). D sebepsiz soğuk; A daveti hakaretle gömer — ikisi de (III) niyetini ihlal eder.',
+    strat:'Kibar redde dört parça arayın: iltifat + "but / I\u2019m afraid" + somut sebep + iyi dilek. Eksik parça = yarım nezaket; fazla sertlik = niyet ihlali.'},
+  { id:14, part:'B', cat:'fn',
+    facts:[
+      'Your friend is spending the weekend at your summer house by the sea.',
+      'The wooden staircase leading down to the beach has become dangerously slippery after last night\u2019s rain.',
+      'Before she heads down, you want to warn her.',
+    ],
+    stem:'Which of the following would you say to <em class="kw">warn</em> her?',
+    clue:'(II) kayganlık + (III) "before she heads down" — uyarı şimdi ve somut önlemle.',
+    opts:[
+      ['I\u2019m sorry the staircase is so ugly — we\u2019ll repaint it next year.','Estetik özrü; güvenlik işlevi (uyarı) tamamen kayıp.'],
+      ['Be careful on the stairs — they get quite slippery in the rain, so hold on to the rail.','DOĞRU. Uyarı işlevi + sebep (yağmur) + somut önlem (korkuluk) üçlüsü.'],
+      ['Did you know that rain makes wood wet?','Alaycı genel bilgi; uyarı işlevi yok, patronizing.'],
+      ['You should have brought shoes with better grip.','Geçmişe dönük suçlama; uyarı ŞİMDİ, inmeden önce yapılmalı.'],
+      ['The beach is closed because of the rain.','Uydurma bilgi; sorun merdivende, plajda değil — hem yanlış hem alakasız.'],
+    ],
+    ans:1, ev:['s14-f1','s14-f2'],
+    why:'"Be careful on the stairs — they get quite slippery in the rain, so hold on to the rail." işlev (uyarı) + sebep (yağmur) + eylem talimatı (korkuluk) üçlüsünü birleştirir; (II) ve (III) numaralı olguların ikisine de hizmet eder.',
+    strat:'Uyarı sorularında şıkta bir EYLEM TALİMATI arayın (hold on / be careful / don\u2019t touch). Bilgi veren ama talimat içermeyen şıklar (C) işlevsiz kalır; "should have" geçmişe dönük suçlamadır.'},
+  { id:15, part:'B', cat:'reg',
+    facts:[
+      'You have been unable to start work on an essay due tomorrow.',
+      'You have been in bed with flu for a week.',
+      'You are now writing an email to your professor to ask, politely, for more time.',
+    ],
+    stem:'Which of the following would be the best sentence to <em class="kw">include in your email</em>?',
+    clue:'(III) resmî e-posta + profesör: kibarlık merdiveninin EN ÜST basamağı gerekir.',
+    opts:[
+      ['Give me a few more days because I was sick.','Emir kipi + kayıtsız ton; profesöre e-posta kaydına aykırı — merdivenin 1. basamağı.'],
+      ['My essay will be late — I hope that\u2019s not a problem.','Bilgilendirme var ama istek nezaketi (talep + çekingenlik) eksik; kayıt yarı-resmî.'],
+      ['I was wondering whether it might be possible to have a short extension, as I have been unwell this week.','DOĞRU. "I was wondering whether… might" kibarlık tavanı + resmî kayıt + sebep.'],
+      ['I couldn\u2019t finish it because the topic turned out to be really boring.','Sebep tahrifi: hastalık (II) değil sıkıcılık; sorumluluğu dışarı atar.'],
+      ['Could you extend the deadline for the whole class?','Kapsam şişirme: yalnız KENDİ ertelesi isteniyor; sınıf adına yetki yok.'],
+    ],
+    ans:2, ev:['s15-f1','s15-f2'],
+    why:'"I was wondering whether it might be possible…" kibarlık merdiveninin dördüncü basamağıdır: resmî e-posta + profesör alıcısı + çekingen istek kalıbı + gerçek sebep (unwell). A emirle başlar; E sınıf adına hareket eder — ikisi de (III)\u2019ü ihlal eder.',
+    strat:'Alıcı profesör/müşteri olduğunda "could" bile yetmez: "I was wondering whether… might" düzeyine çıkın. Emir kipini (Give me…) resmî kanalda asla kabul etmeyin; kapsam şişirmeyi (whole class) de.'},
+  { id:16, part:'B', cat:'fn',
+    facts:[
+      'You and your close friend both applied for the same job.',
+      'She has just been offered the position.',
+      'Although you are naturally a little disappointed, you want to show that you are genuinely pleased for her.',
+    ],
+    stem:'Which of the following would you say to <em class="kw">congratulate</em> her?',
+    clue:'(III) "genuinely pleased" — tebrik işlevi + kutlama eylemi.',
+    opts:[
+      ['I suppose they wanted someone less qualified.','Ekşi üzüm: hem kurulu hem arkadaşını küçültür; tebrik işlevi sıfır.'],
+      ['The interview panel clearly made a mistake.','Arkadaşın başarısını şüpheyle lekeler.'],
+      ['Better luck for me next time, I guess.','Kendine yas; tebrik hiç yok — (III) karşılanmaz.'],
+      ['Do you think they\u2019d reconsider if I emailed the panel?','Sonuca itiraz etme çabası; tebrik yerine pazarlık.'],
+      ['Congratulations — you totally deserve it! Let\u2019s celebrate this evening.','DOĞRU. Tebrik + hak etme vurgusu + kutlama eylemi; (III) niyet birebir.'],
+    ],
+    ans:4, ev:['s16-f0','s16-f2'],
+    why:'"Congratulations — you totally deserve it! Let\u2019s celebrate…" tebrik işlevini yerine getirir ve sevinci bir EYLEME çevirir (kutlama). C kendine odaklanır, A ve B kurulü/arkadaşı küçültür — üçü de (III)\u2019teki "genuine pleasure"i karşılayamaz.',
+    strat:'Tebrik sorularında sevinci DIŞA VURAN bir eylem arayın (celebrate / dinner / drink). Kendine odaklı şıklar ("better luck for ME") işlevi çalar; kurulü eleştiren şıklar tebriği zehirler.'},
+  { id:17, part:'B', cat:'reg',
+    facts:[
+      'Your upstairs neighbour has started playing loud music late at night.',
+      'This has happened several times this week and is affecting your sleep.',
+      'You have decided to mention the problem without starting a quarrel.',
+    ],
+    stem:'Which of the following would you say to <em class="kw">complain politely</em>?',
+    clue:'(III) "without starting a quarrel" — tehdit, ironi ve toplu baskı elenir.',
+    opts:[
+      ['I hate to bother you, but the late-night music has been keeping me awake — would you mind using headphones after midnight?','DOĞRU. Yumuşatıcı + somut etki + çözüm odaklı soru: şikâyet-çatışmasız dengesi.'],
+      ['If you don\u2019t stop that noise, I\u2019ll call the police.','Tehdit; (III) "quarrel"\u201u tam tersine davet eder.'],
+      ['Great party last night — I couldn\u2019t sleep at all!','Pasif-agresif ironi; mesaj belirsiz, komşu iltifat sanabilir.'],
+      ['The whole building is complaining about you, by the way.','Kolektif baskı/utandırma; komşuluğu kamplaştırır.'],
+      ['Do you even own a pair of headphones?','Retorik hakaret; işlev şikâyet değil saldırı.'],
+    ],
+    ans:0, ev:['s17-f1','s17-f2'],
+    why:'A şıkkı kibar şikâyetin üçlü formülünü taşır: yumuşatıcı ("I hate to bother you") + etki ("keeping me awake") + çözüm sorusu ("would you mind…?"). B tehditle, C ironiyle, D toplu baskıyla quarrel\u2019u davet eder — hepsi (III) ihlalidir.',
+    strat:'Kibar şikâyet = yumuşatıcı + somut etki + çözüm talebi. İroni belirsiz bırakır: komşu "Great party"yi iltifat sanabilir — kibarlıkta netlik esastır.'},
+  { id:18, part:'B', cat:'fn',
+    facts:[
+      'You notice an elderly man at the bus stop struggling with several heavy shopping bags.',
+      'Your bus will not arrive for another ten minutes.',
+      'You would like to offer your help without embarrassing him.',
+    ],
+    stem:'Which of the following would you say to <em class="kw">offer help</em>?',
+    clue:'(III) "without embarrassing him" — teklif, reddedilebilir biçimde sunulmalı.',
+    opts:[
+      ['You really shouldn\u2019t carry so much at your age.','Yaş üzerinden patronizing uyarı; utandırmayan teklif (III) tam tersine döner.'],
+      ['Give me those bags immediately.','Emir; özerkliğe saygısız.'],
+      ['Are you sure you can manage all that?','Yeterliliğine gölge düşüren soru; teklif yine yapılmıyor.'],
+      ['Those bags look rather heavy — would you like a hand while we wait for the bus?','DOĞRU. Gözlem + gönüllü soru + ret hakkı açık; (I)(II)(III) tamamı.'],
+      ['I always help elderly people — it\u2019s kind of my duty.','Kendini övme; teklifi utandırıcı bir sahneye çevirir.'],
+    ],
+    ans:3, ev:['s18-f1','s18-f2'],
+    why:'"Those bags look rather heavy — would you like a hand while we wait for the bus?" gözlemden (kilo değil kişi hakkında yargı yok) gönüllü bir soruya uzanır ve "no" deme hakkını açık bırakır: (III)\u2019teki "utandırmadan" koşulunun tam karşılığıdır.',
+    strat:'Utandırmayan teklifin gramatiği: gözlem ("those bags look heavy") + "would you like…?" sorusu. Emir ("Give me") ve yetenek sorgusu ("Are you sure you can…?") patronizingdir; "at your age" gibi etiketler yasaktır.'},
+  { id:19, part:'B', cat:'sit',
+    facts:[
+      'A storm has grounded every flight out of the city, including yours.',
+      'Tomorrow is your best friend\u2019s wedding, which you will now miss.',
+      'You want her to hear the news from you personally, over the phone, rather than through a text message.',
+    ],
+    stem:'Which of the following would you say <em class="kw">on the phone</em>?',
+    clue:'(I) sebep fırtına · (II) alıcı gelin · (III) kanal telefon — üçü de şıkta birebir olmalı.',
+    opts:[
+      ['Sorry I can\u2019t make it — work is keeping me here.','Sebep tahrifi: iş değil fırtına (I); gerçeği çarpıtan şık elenir.'],
+      ['I\u2019m devastated to tell you this — the storm has grounded every flight, and I\u2019m so sorry I\u2019ll miss your wedding.','DOĞRU. Doğru sebep + doğru kitle + duygusal açıklık; (III) birebir.'],
+      ['Is there anything the airline can do about the weather?','Yanlış kitle: soru gelin\u2019e yönelmiş ama havayoluna ait — (III) ihlali.'],
+      ['I know it\u2019s my wedding today, but I can\u2019t make it.','Rol karmaşası: düğün ONUN (II); "my wedding" kim-neyi karıştırır.'],
+      ['Why don\u2019t we postpone the whole wedding until my flight lands?','Ölçüsüz öneri; ertesi günkü düğünü bir yolcuya göre erteletmek bağlamı hiçe sayar.'],
+    ],
+    ans:1, ev:['s19-f0','s19-f2'],
+    why:'B doğru sebebi (storm) doğru kişiye (gelin) doğru duygusal tonda söyler. A sebep ikamesi, C yanlış kitle, D rol karmaşası, E ölçüsüz kapsam — dört şık, durum çözümleme hatalarının dört klasik türüdür.',
+    strat:'Durum olgularını KİM / KİME / NASIL başlıklarıyla ayırın: her başlıkta çelişen şık anında düşer. Sebep ikamesi (A) bu soru türünün en sık tahrifidir.'},
+  { id:20, part:'B', cat:'sit',
+    facts:[
+      'A new colleague keeps asking you the same computer questions, several times a day.',
+      'You are happy to help but your own workload is heavy.',
+      'You have decided to write a short step-by-step guide and hand it to him.',
+    ],
+    stem:'Which of the following would you say while <em class="kw">handing him the guide</em>?',
+    clue:'(I) yinelenen sorular + (III) rehber teslimi — konuşma, rehber VERİLİRKEN yapılmalı.',
+    opts:[
+      ['Stop asking me questions — I\u2019m not your teacher.','Sert sınır çekme; (II)\u2019deki "happy to help but busy" dengesi bozulur.'],
+      ['Computers obviously aren\u2019t your thing.','Aşağılayıcı etiketleme; işlev (rehber sunma) yok.'],
+      ['Instead of asking me every single time, could you have a look at this short guide I\u2019ve written? It covers exactly the steps you keep asking about.','DOĞRU. Sorunun adı + çözümün adresi birebir; kitle bizzat kendisi.'],
+      ['I\u2019ve prepared a guide that everyone in the department is required to read.','Kitle şişirme: sorun tek kişideyken departmana zorunlu okuma dayatmak + ağır "required" tonu.'],
+      ['Why do you ask me the same thing every single day?','Sitem yüklü soru; çözüm (III) hiç sunulmuyor.'],
+    ],
+    ans:2, ev:['s20-f0','s20-f2'],
+    why:'C şıkkı rehberi tam adrese teslim eder: "the steps you keep asking about" ifadesi (I)\u2019deki yinelenen sorularla birebir örtüşür, "could you have a look" kibarlığı (II)\u2019deki meşgul ama yardımsever tonu korur. D kitleyi şişirir; E çözümü hiç sunmaz.',
+    strat:'Çözüm zaten (III)\u2019te verilmişse doğru şık onu SÖZLE teslim eder: çözümü yeniden icat eden (D) ya da yalnız sitem eden (E) şıklar dışarıda kalır. Teslim cümlesi: kibar istek + içeriğin tanımı.'},
+  { id:21, part:'B', cat:'con',
+    facts:[
+      'Your roommate is cooking dinner on Friday for a group of friends.',
+      'One of the guests, whom your roommate has never met, has a serious nut allergy.',
+      'You happen to know this, but your roommate does not.',
+    ],
+    stem:'Which of the following would you say to <em class="kw">your roommate</em>?',
+    clue:'(I) alerjik misafir + (II) roommate bilmiyor — bilgi AKTARIMI şıkta somut olmalı.',
+    opts:[
+      ['Just so you know, one of your Friday guests has a nut allergy — it might be worth checking the recipes.','DOĞRU. Alıcı + bilgi + zaman + eylem zinciri eksiksiz.'],
+      ['Nut allergies can be very dangerous, in general.','Genel doğru bilgi ama durumun BİLGİSİ (misafirin alerjisi) aktarılmıyor — içerik boş kalır.'],
+      ['Should I invite some more people to Friday dinner?','Misafir listesiyle oynama; verilen bilgiyle bağ yok.'],
+      ['I\u2019ve eaten all the nuts you bought, sorry.','Tangent itiraf; alerji bilgisi hiç verilmez.'],
+      ['Honestly, your cooking usually has too many nuts in it.','Mutfak eleştirisi; bilgi yine verilmez, (III) "bilmiyor" dengesi eleştiriye döner.'],
+    ],
+    ans:0, ev:['s21-f1','s21-f2'],
+    why:'A şıkkı alıcıyı ("your Friday guests"), bilgiyi (nut allergy) ve eylemi ("check the recipes") eksiksiz verir: aktarım işlevi tamamlanmıştır. B, D ve E konuya dokunur ama BİLGİYİ iletmez — içerik yarım kalır.',
+    strat:'Bilgi aktarımı sorularında "kişi + olgu + eylem" üçlüsünü şıkta arayın. Yalnız konuyu anan şıklar (B, E) klasik genelleme tuzağıdır: somut olmayan doğru cümle, somut gereken görevi örtmez.'},
+  { id:22, part:'B', cat:'con',
+    facts:[
+      'A tourist stops you to ask the way to the old town.',
+      'You know the tram is quicker, but the walk along the coast is far more pleasant.',
+      'She says she is in no particular hurry and seems happy to explore.',
+    ],
+    stem:'Which of the following would you say in <em class="kw">your reply</em>?',
+    clue:'(III) acele yok + (II) sahil keyifli — öneri, bu iki olgunun önceliğiyle.',
+    opts:[
+      ['Just take the tram — it\u2019s the fastest.','"No particular hurry" (III) bilgisini yok sayar; hız tek kriter değil.'],
+      ['I never go to the old town myself.','Yardım işlevinden kaçış; yönlendirme sıfır.'],
+      ['Take a taxi — though it\u2019ll cost you a fortune.','Sorulmamış seçenek + çelişkili bedel uyarısı; turist profilini (III) okumuyor.'],
+      ['The old town is honestly quite boring — don\u2019t bother.','Varış noktasını caydırma; amacı (I) hiçe sayar.'],
+      ['Since you\u2019ve got time, I\u2019d walk along the coast — it takes a bit longer but is really worth it; the tram is always there if your feet give out.','DOĞRU. (III) zaman bol → sahil önceliği; yorgunluk ihtimaline tramvay yedeği; kibar gerekçe.'],
+    ],
+    ans:4, ev:['s22-f2','s22-f1'],
+    why:'E şıkkı "Since you\u2019ve got time" ile (III)\u2019ü, sahil yürüyüşünü (II) ile gerekçelendirir ve tramvayı yedek olarak bırakır: öneri, durumun TÜM parametrelerini (zaman, keyif, yorgunluk ihtimali) okur. A yalnız hızı düşünür.',
+    strat:'Öneri sorularında durum parametrelerini sıralayın (zaman, keyif, yorgunluk): doğru öneri parametrelere GEREKÇEYLE bağlanır. Tek parametreli şık (A: sadece hız) dar kalır; sormamış seçenek (C: taksi) tangent\u2019tır.'},
+  { id:23, part:'B', cat:'log',
+    facts:[
+      'Your team\u2019s project failed mainly because two members did not share their research findings with each other.',
+      'In the post-mortem meeting, the manager asks for your honest opinion about the cause.',
+      'You intend to state the real cause without accusing any individual.',
+    ],
+    stem:'Which of the following would you say in <em class="kw">the meeting</em>?',
+    clue:'(I) sebep = bilgi paylaşımı eksikliği; (III) kişisiz dille anlatım.',
+    opts:[
+      ['It failed because some people here are simply lazy.','Kişilere yönelik damgalama; (III) "kişileri suçlamadan" tam tersi.'],
+      ['I think the main issue was communication — the research findings never reached everyone who needed them.','DOĞRU. Sebep, kişi değil SÜREÇ diline çevrilir; dürüst (II) + ölçülü (III).'],
+      ['We failed because the manager set an impossible deadline.','Sebep tahrifi: son tarih değil bilgi paylaşımı (I); ayrıca toplantıda yöneticiyi suçlamak niyetle çelişir.'],
+      ['Honestly, everything went perfectly — failure is a state of mind.','Gerçeği inkâr; "honest opinion" (II) ile doğrudan çelişki.'],
+      ['I\u2019d rather not discuss who is to blame.','Görüş vermeme; dürüst değerlendirme isteğini (II) reddeder.'],
+    ],
+    ans:1, ev:['s23-f0','s23-f2'],
+    why:'B şıkkı "communication" adlı süreç sorunu tanımlar, kimseyi "lazy" diye damgalamaz: sebep (I) doğru aktarılır ve (III)\u2019teki kişisizlik korunur. A damga, C uydurma sebep, D inkâr, E suskunluk — dördü de niyetle çelişir.',
+    strat:'Sebep bildirirken süreç isimleri (communication, coordination) kişi sıfatlarından (lazy, careless) her zaman daha güvenlidir. Mutlak ve inkârcı ifadeler, "honest view" isteyen köklerle asla uyumlu değildir.'},
+  { id:24, part:'B', cat:'log',
+    facts:[
+      'In your study group, one member proposes preparing only past exam questions for the upcoming test.',
+      'You think this strategy alone is risky, as the syllabus is broad.',
+      'You want to voice your disagreement without damaging the group\u2019s cooperative spirit.',
+    ],
+    stem:'Which of the following would you say to <em class="kw">disagree politely</em>?',
+    clue:'(III) "cooperative spirit" — onay + ama + alternatif + gruba danışma.',
+    opts:[
+      ['That has to be the worst idea I\u2019ve heard all year.','Aşırılık ("worst") + saldırı tonu; grup ruhunu yıkar.'],
+      ['Sure, let\u2019s do only past papers — I don\u2019t really care.','Sahte onay + kayıtsızlık; riskli bulduğunu (II) gizler.'],
+      ['People who suggest such things clearly haven\u2019t studied properly.','Öneren kişiye saldırı; muhalefet ≠ hakaret.'],
+      ['Past papers are definitely useful, but I think we\u2019d be on safer ground if we combined them with the lecture notes — what does everyone else think?','DOĞRU. Onay + "but" + alternatif + gruba danışma: nazik muhalefet dörtlüsü.'],
+      ['I disagree — and I\u2019ve already told the professor what you\u2019re planning.','Güvensizlik üreten "ihbar"; muhalefetin ölçüsünü patlatır.'],
+    ],
+    ans:3, ev:['s24-f1','s24-f2'],
+    why:'D şıkkı nazik muhalefetin dört adımını da atar: önce onaylar ("definitely useful"), "but" ile dönüş yapar, alternatif sunar ("combined with the lecture notes") ve kararı gruba iade eder ("what does everyone else think?"). A ve C saldırgan, B sahte-onay, E güven ihlalidir.',
+    strat:'Nazik muhalefet formülü: onay → "but" → alternatif → topu gruba atma. Dört adımdan biri eksikse şık "yarı-muhalefet"tir; kişiyi hedef alan ("people who…") yapılar daima elenir.'},
+];
+
+/* ════════════════════════════════════════════════════════════
+   DURUM + YARDIMCILAR
+   ════════════════════════════════════════════════════════════ */
+const KEY='ydt-dialog-lab-v1';
+let state={ans:{},marks:{},wskey:false,sim:{score:0,streak:0,best:0,idx:0}};
+try{
+  const raw=localStorage.getItem(KEY);
+  if(raw){
+    const s=JSON.parse(raw);
+    state.ans=s.ans||{}; state.marks=s.marks||{}; state.wskey=!!s.wskey;
+    state.sim=Object.assign(state.sim,s.sim||{});
+  }
+}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+function el(tag,cls,html){const n=document.createElement(tag); if(cls)n.className=cls; if(html!==undefined)n.innerHTML=html; return n;}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function catQ(c){return QUESTIONS.filter(q=>q.cat===c).length;}
+function toast(msg){const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* Kanıt kayıt defteri: diyalog satırları + durum olguları */
+const SENT={};
+DLGS.forEach((d,di)=>d.lines.forEach((l,li)=>{SENT[`d${di}-l${li}`]={sp:l.sp,text:l.t.replace(/----/g,'…'),node:null};}));
+QUESTIONS.filter(q=>q.part==='B').forEach(q=>q.facts.forEach((f,j)=>{SENT[`s${q.id}-f${j}`]={sp:null,text:f,node:null};}));
+
+/* ════════════════════════════════════════════════════════════
+   HERO ŞERİTLERİ
+   ════════════════════════════════════════════════════════════ */
+(function(){
+  const box=document.getElementById('strips');
+  Object.entries(CATS).forEach(([k,c])=>{
+    const row=el('div','strip'); row.style.setProperty('--c',c.color);
+    row.innerHTML=`<div class="num">${c.no}</div>
+      <div class="nm"><b>${c.name}</b><span>${c.en}</span></div>
+      <div class="ex">${esc(LESSONS.find(l=>l.cat===k).roots[0][0])}</div>
+      <div class="cnt">${catQ(k)} soru</div>`;
+    row.addEventListener('click',()=>{openLesson(k); document.getElementById('dersler').scrollIntoView({behavior:'smooth'});});
+    box.appendChild(row);
+  });
+})();
+
+/* ════════════════════════════════════════════════════════════
+   DERSLER
+   ════════════════════════════════════════════════════════════ */
+const LESSON_EL={};
+(function(){
+  const box=document.getElementById('lessons');
+  LESSONS.forEach(L=>{
+    const c=CATS[L.cat];
+    const wrap=el('div','lesson reveal'); wrap.style.setProperty('--c',c.color);
+    const head=el('button','lesson-h');
+    head.innerHTML=`<span class="cbar">${c.no}</span>
+      <span class="tts"><b>${L.title}</b><span>${c.en} · ${L.roots.length} tanıma satırı</span></span>
+      <span class="chev"><svg class="ic" viewBox="0 0 24 24" width="20" height="20"><polyline points="6 9 12 15 18 9"/></svg></span>`;
+    const body=el('div','lesson-b');
+    const grid=el('div','grid');
+    const left=el('div');
+    left.innerHTML=`<p class="h-mini">Tanıma Tablosu</p>
+      <table class="roots-t">${L.roots.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</table>`;
+    const right=el('div');
+    right.innerHTML=`<p class="h-mini">Çözüm Yaklaşımı</p>
+      <ul class="steps">${L.steps.map(s=>`<li>${s}</li>`).join('')}</ul>
+      <div class="trapbox"><b>Tuzak Alanı · ${L.trap.t}</b>${L.trap.d}</div>`;
+    grid.append(left,right); body.append(grid); wrap.append(head,body); box.append(wrap);
+    head.addEventListener('click',()=>wrap.classList.toggle('open'));
+    LESSON_EL[L.cat]=wrap;
+  });
+})();
+function openLesson(cat){for(const k in LESSON_EL){LESSON_EL[k].classList.toggle('open',k===cat);}}
+
+/* ════════════════════════════════════════════════════════════
+   İŞLEV LAB
+   ════════════════════════════════════════════════════════════ */
+let simOrder=[];
+(function(){
+  const b=document.getElementById('simBtns');
+  Object.entries(FUNCS).forEach(([k,f])=>{
+    const btn=el('button','catb',f.name); btn.style.setProperty('--c',f.color); btn.dataset.fn=k;
+    btn.addEventListener('click',()=>simAnswer(k,btn));
+    b.append(btn);
+  });
+  document.getElementById('simNext').addEventListener('click',simNext);
+  simOrder=shuffle([...FNITEMS.keys()]);
+  state.sim.idx=Math.min(state.sim.idx,simOrder.length);
+  renderSimStats(); renderRoot();
+})();
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function renderRoot(){
+  const i=state.sim.idx%simOrder.length;
+  const r=FNITEMS[simOrder[i]];
+  document.getElementById('simCount').textContent=`İFADE ${i+1} / ${simOrder.length}`;
+  document.getElementById('simRoot').textContent=r.en;
+  document.getElementById('simTr').textContent='TR: '+r.tr;
+  document.querySelectorAll('.catb').forEach(b=>{b.classList.remove('wasright','waswrong'); b.disabled=false;});
+  document.getElementById('simFb').classList.remove('show');
+}
+function simAnswer(k,btn){
+  if(document.getElementById('simFb').classList.contains('show'))return;
+  const r=FNITEMS[simOrder[state.sim.idx%simOrder.length]];
+  const ok=k===r.fn;
+  document.querySelectorAll('.catb').forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.fn===r.fn)b.classList.add('wasright');
+  });
+  if(!ok)btn.classList.add('waswrong');
+  if(ok){state.sim.score++; state.sim.streak++; state.sim.best=Math.max(state.sim.best,state.sim.streak);}
+  else state.sim.streak=0;
+  save(); renderSimStats();
+  const fb=document.getElementById('simFb');
+  const v=document.getElementById('simVerdict');
+  v.textContent=ok?'Doğru teşhis — '+FUNCS[r.fn].name:'Yanlış — bu ifade '+FUNCS[r.fn].name+' işlevini taşıyordu';
+  v.className='verdict '+(ok?'ok':'no');
+  document.getElementById('simNote').innerHTML=r.note;
+  fb.classList.add('show');
+}
+function simNext(){
+  state.sim.idx++;
+  if(state.sim.idx%simOrder.length===0){simOrder=shuffle(simOrder); toast('İfade destesi yeniden karıştırıldı');}
+  save(); renderRoot();
+}
+function renderSimStats(){
+  document.getElementById('simScore').textContent=state.sim.score;
+  document.getElementById('simStreak').textContent=state.sim.streak;
+  document.getElementById('simBest').textContent=state.sim.best;
+}
+
+/* ════════════════════════════════════════════════════════════
+   KULLANICI VURGULARI (mavi işaretler — kalıcı)
+   ════════════════════════════════════════════════════════════ */
+function markNode(key){
+  return document.getElementById(key)||document.querySelector('[data-mk="'+key+'"]');
+}
+function applyMarkNode(key){
+  const n=markNode(key);
+  if(n){n.classList.add('umark'); const pen=n.querySelector('.pen'); if(pen)pen.classList.add('on');}
+}
+function toggleMark(key,node,pi){
+  if(state.marks[key])delete state.marks[key]; else state.marks[key]=1;
+  node.classList.toggle('umark',!!state.marks[key]);
+  const pen=node.querySelector('.pen'); if(pen)pen.classList.toggle('on',!!state.marks[key]);
+  save(); if(pi!==null&&pi!==undefined)updateTabs(pi);
+}
+function clearMarks(pi){
+  const prefs=[`d${pi}-l`].concat(DLGS[pi].blanks.map(q=>q+'#'));
+  let n=0;
+  Object.keys(state.marks).forEach(k=>{
+    if(prefs.some(pre=>k.startsWith(pre))){
+      delete state.marks[k]; n++;
+      const node=markNode(k);
+      if(node){node.classList.remove('umark'); const pen=node.querySelector('.pen'); if(pen)pen.classList.remove('on');}
+    }
+  });
+  save(); updateTabs(pi);
+  toast(n?n+' işaret temizlendi':'Zaten işaret yoktu');
+}
+function updateTabs(pi){
+  const cnt=Object.keys(state.marks).filter(k=>k.startsWith(`d${pi}-l`)).length;
+  const m=document.getElementById('mkcnt-'+pi);
+  if(m)m.textContent=cnt?cnt+' işaretli satır':'işaret yok';
+  const qs=DLGS[pi].blanks.map(id=>QUESTIONS.find(q=>q.id===id));
+  const done=qs.filter(q=>state.ans[q.id]!==undefined).length;
+  const t=document.getElementById('qcnt-'+pi);
+  if(t)t.textContent=qs.length+' soru'+(done?' · '+done+' çözüldü':'');
+}
+
+/* ════════════════════════════════════════════════════════════
+   DENEME — Bölüm A (yan yana) + Bölüm B (kart içi iki kolon)
+   ════════════════════════════════════════════════════════════ */
+(function(){
+  const legend=document.getElementById('legend');
+  Object.values(CATS).forEach(c=>{const ch=el('span','chip',c.name); ch.style.setProperty('--c',c.color); legend.append(ch);});
+  const exam=document.getElementById('exam');
+
+  /* ── BÖLÜM A ── */
+  exam.append(el('div','partdiv reveal','<b>BÖLÜM A · DİYALOG</b><span>Sorular 1–12 · 6 konuşma × 2 boşluk</span>'));
+
+  DLGS.forEach((D,di)=>{
+    const split=el('div','split reveal');
+    const h=el('div','split-h');
+    h.innerHTML=`<span class="pno">DİYALOG ${di+1} / ${DLGS.length}</span>
+      <h3>${esc(D.title)}</h3>
+      <span class="pmeta">${esc(D.meta)}</span>
+      <span class="hint"><svg class="ic" viewBox="0 0 24 24" width="13" height="13"><path d="M17 3l4 4L8 20l-5 1 1-5L17 3z"/></svg> Satıra tıkla → mavi vurgu · boşluk rozeti → soruya atla</span>
+      <button class="clr">İşaretleri temizle</button>`;
+    h.querySelector('.clr').addEventListener('click',()=>clearMarks(di));
+
+    /* SOL PANEL: KONUŞMA */
+    const paneP=el('div','pane');
+    paneP.innerHTML=`<div class="pane-tab"><b><svg class="ic" viewBox="0 0 24 24" width="12" height="12"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> KONUŞMA</b><span id="mkcnt-${di}">işaret yok</span></div>`;
+    const bodyP=el('div','pane-body dtext');
+    let bi=0;
+    D.lines.forEach((l,li)=>{
+      const id=`d${di}-l${li}`;
+      const row=el('div','dl');
+      row.id=id; row.title='Tıklayıp işaretle / kaldır';
+      row.innerHTML=`<span class="spk">${esc(l.sp)}</span><span class="txt"></span>`;
+      const txt=row.querySelector('.txt');
+      const parts=l.t.split('----');
+      parts.forEach((p,pi2)=>{
+        if(pi2>0){
+          const qid=D.blanks[bi];
+          const sym=bi===0?'\u2461':'\u2460';
+          const symReal=bi===0?'\u2460':'\u2461';
+          const chip=el('button','blip',(bi===0?'\u2460':'\u2461')+' ----');
+          chip.title=`Boşluk ${bi===0?'①':'②'} → Soru ${qid}`;
+          chip.addEventListener('click',e=>{e.stopPropagation(); jumpToQ(qid);});
+          txt.append(chip);
+          bi++;
+        }
+        if(p)txt.append(document.createTextNode(p));
+      });
+      row.addEventListener('click',()=>toggleMark(id,row,di));
+      bodyP.append(row);
+      SENT[id].node=row;
+    });
+    paneP.append(bodyP);
+
+    /* SAĞ PANEL: SORULAR */
+    const paneQ=el('div','pane');
+    paneQ.innerHTML=`<div class="pane-tab"><b><svg class="ic" viewBox="0 0 24 24" width="12" height="12"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> SORULAR</b><span id="qcnt-${di}"></span></div>`;
+    const bodyQ=el('div','pane-body');
+    D.blanks.forEach(qid=>bodyQ.append(buildQ(QUESTIONS.find(q=>q.id===qid))));
+    paneQ.append(bodyQ);
+
+    split.append(h,paneP,paneQ);
+    exam.append(split);
+  });
+
+  /* ── BÖLÜM B ── */
+  exam.append(el('div','partdiv reveal','<b>BÖLÜM B · DURUMA UYGUN İFADE</b><span>Sorular 13–24 · (I)(II)(III) olgularının tamamı kısıttır</span>'));
+  QUESTIONS.filter(q=>q.part==='B').forEach(q=>exam.append(buildS(q)));
+
+  Object.keys(state.marks).forEach(applyMarkNode);
+  for(let i=0;i<DLGS.length;i++)updateTabs(i);
+})();
+
+function jumpToQ(qid){
+  const card=document.getElementById('q'+qid);
+  if(!card)return;
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  card.classList.add('flash');
+  setTimeout(()=>card.classList.remove('flash'),1400);
+}
+
+function buildQ(q){
+  const c=CATS[q.cat];
+  const card=el('div','qcard'); card.style.setProperty('--c',c.color); card.id='q'+q.id;
+  const top=el('div','qtop');
+  top.innerHTML=`<span class="chip">${c.name}</span><span class="qn">SORU ${String(q.id).padStart(2,'0')} / 24</span><span class="pts">5 şık · tek deneme</span>`;
+  const stem=el('p','stem',q.stem);
+  stem.dataset.mk=q.id+'#stem';
+  stem.title='Tıklayıp bu satırı işaretle';
+  stem.addEventListener('click',()=>toggleMark(q.id+'#stem',stem,null));
+  const opts=el('div','opts');
+  q.opts.forEach((o,i)=>{
+    const d=el('div','opt'); d.dataset.mk=q.id+'#o'+i;
+    d.innerHTML=`<span class="key">${'ABCDE'[i]}</span><span>${esc(o[0])}</span><span class="mk"></span>
+      <button class="pen" title="Şıkkı işarele / kaldır"><svg class="ic" viewBox="0 0 24 24" width="13" height="13"><path d="M17 3l4 4L8 20l-5 1 1-5L17 3z"/></svg></button>`;
+    d.addEventListener('click',()=>pick(q,i));
+    d.querySelector('.pen').addEventListener('click',e=>{e.stopPropagation(); toggleMark(q.id+'#o'+i,d,null);});
+    opts.append(d);
+  });
+  card.append(top,stem,opts);
+  const fb=el('div','fb'); card.append(fb);
+  return card;
+}
+
+function buildS(q){
+  const c=CATS[q.cat];
+  const sq=el('div','sq reveal'); sq.style.setProperty('--c',c.color); sq.id='q'+q.id;
+  /* SOL: DURUM DOSYASI */
+  const left=el('div','sq-b');
+  left.innerHTML=`<div class="sq-tab"><b>DURUM DOSYASI</b><span>${q.facts.length} olgu · kısıt</span></div>`;
+  const body=el('div','sq-body');
+  const romans=['I','II','III'];
+  q.facts.forEach((f,j)=>{
+    const id=`s${q.id}-f${j}`;
+    const p=el('p','fact',`<span class="fr">(${romans[j]})</span>${esc(f)}`);
+    p.id=id; p.title='Tıklayıp işaretle / kaldır';
+    p.addEventListener('click',()=>toggleMark(id,p,null));
+    body.append(p);
+    SENT[id].node=p;
+  });
+  left.append(body);
+  /* SAĞ: GÖREV + ŞIKLAR */
+  const right=el('div','sq-r');
+  const top=el('div','qtop');
+  top.innerHTML=`<span class="chip">${c.name}</span><span class="qn">SORU ${q.id} / 24</span><span class="pts">5 şık · tek deneme</span>`;
+  const stem=el('p','stem',q.stem);
+  stem.dataset.mk=q.id+'#stem';
+  stem.title='Tıklayıp bu satırı işaretle';
+  stem.addEventListener('click',()=>toggleMark(q.id+'#stem',stem,null));
+  const opts=el('div','opts');
+  q.opts.forEach((o,i)=>{
+    const d=el('div','opt'); d.dataset.mk=q.id+'#o'+i;
+    d.innerHTML=`<span class="key">${'ABCDE'[i]}</span><span>${esc(o[0])}</span><span class="mk"></span>
+      <button class="pen" title="Şıkkı işarele / kaldır"><svg class="ic" viewBox="0 0 24 24" width="13" height="13"><path d="M17 3l4 4L8 20l-5 1 1-5L17 3z"/></svg></button>`;
+    d.addEventListener('click',()=>pick(q,i));
+    d.querySelector('.pen').addEventListener('click',e=>{e.stopPropagation(); toggleMark(q.id+'#o'+i,d,null);});
+    opts.append(d);
+  });
+  const fb=el('div','fb');
+  right.append(top,stem,opts,fb);
+  sq.append(left,right);
+  return sq;
+}
+
+function pick(q,i){
+  if(state.ans[q.id]!==undefined)return;
+  state.ans[q.id]=i; save();
+  paintQ(q); updateReport();
+  if(q.part==='A')updateTabs(q.d);
+}
+
+function paintQ(q){
+  const card=document.getElementById('q'+q.id);
+  const c=CATS[q.cat];
+  card.classList.add('answered');
+  const chosen=state.ans[q.id]; const ok=chosen===q.ans;
+  card.querySelectorAll('.opt').forEach((b,i)=>{
+    b.classList.toggle('correct',i===q.ans);
+    b.classList.toggle('wrongpick',i===chosen&&!ok);
+    b.querySelector('.mk').innerHTML=i===q.ans
+      ?'<svg class="ic" viewBox="0 0 24 24" width="18" height="18"><polyline points="20 6 9 17 4 12"/></svg>'
+      :(i===chosen?'<svg class="ic" viewBox="0 0 24 24" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>':'');
+  });
+  const fb=card.querySelector('.fb'); fb.classList.add('show');
+  const evq=q.ev.map(id=>{
+    const s=SENT[id];
+    return (s.sp?esc(s.sp)+': ':'')+'\u201C'+esc(s.text)+'\u201D';
+  }).join(' ');
+  fb.innerHTML=`
+    <div class="fb-h ${ok?'ok':'no'}">
+      <svg class="ic" viewBox="0 0 24 24" width="18" height="18">${ok?'<polyline points="20 6 9 17 4 12"/>':'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'}</svg>
+      ${ok?'Doğru — '+c.name+' becerisi yerinde':'Yanlış — doğru cevap: '+'ABCDE'[q.ans]}
+    </div>
+    <div class="fb-b">
+      ${ok?'':`<h4>Seçimin analizi · <b>${'ABCDE'[chosen]}</b></h4><p class="fb-p">${esc(q.opts[chosen][1])}</p>`}
+      <h4>Neden <b>${'ABCDE'[q.ans]}</b> doğru?</h4>
+      <p class="fb-p">${esc(q.opts[q.ans][1]).replace(/^DOĞRU\.\s*/,'')}</p>
+      <p class="fb-p" style="margin-top:6px">${esc(q.why)}</p>
+      <h4>${q.part==='A'?'Konuşmadaki kanıt':'Durumdaki kanıt (kısıtlar)'}</h4>
+      <div class="evq">${evq}</div>
+      <h4>Şık şık geribildirim — çeldirici dökümü</h4>
+      <ul class="dump">
+        ${q.opts.map((o,i)=>`<li class="${i===q.ans?'okr':''} ${i===chosen&&i!==q.ans?'mine':''}"><span class="k">${'ABCDE'[i]}${i===q.ans?' \u2713':(i===chosen?' \u2717':'')}</span><span>${esc(o[1])}</span></li>`).join('')}
+      </ul>
+      <h4>Saha notları</h4>
+      <div class="fb-duo">
+        <div class="fb-box tint"><b>Kökteki ipucu</b>${esc(q.clue)}</div>
+        <div class="fb-box"><b>Stratejik not</b>${esc(q.strat)}</div>
+      </div>
+      <div class="fb-act">
+        <button class="btn small evbtn">${q.part==='A'?'Kanıtı konuşmada göster':'Kanıtı durumda göster'}</button>
+      </div>
+    </div>`;
+  fb.querySelector('.evbtn').addEventListener('click',evToggle(q,card));
+}
+
+function scrollToSent(sent){
+  const pane=sent.closest('.pane-body');
+  if(!pane)return;
+  const top=sent.getBoundingClientRect().top-pane.getBoundingClientRect().top+pane.scrollTop-70;
+  pane.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+}
+function evToggle(q,card){
+  return function(){
+    const btn=card.querySelector('.evbtn');
+    const wasOn=btn.dataset.on==='1';
+    document.querySelectorAll('.dl.evid,.fact.evid').forEach(s=>s.classList.remove('evid'));
+    document.querySelectorAll('.evbtn').forEach(b=>{b.dataset.on=''; b.textContent=b.textContent.replace('Vurguyu kaldır','göster').replace('göster','göster');});
+    document.querySelectorAll('.evbtn').forEach(b=>{b.textContent=b.dataset.orig||(b.dataset.orig=b.textContent);});
+    if(wasOn)return;
+    let first=null;
+    q.ev.forEach(id=>{const s=SENT[id].node; if(s){s.classList.add('evid'); if(!first)first=s;}});
+    btn.dataset.on='1'; btn.textContent='Vurguyu kaldır';
+    if(first)scrollToSent(first);
+  };
+}
+
+/* Açılışta eski cevapları geri boya */
+QUESTIONS.forEach(q=>{if(state.ans[q.id]!==undefined)paintQ(q);});
+
+/* ════════════════════════════════════════════════════════════
+   KARNE
+   ════════════════════════════════════════════════════════════ */
+const TOTAL=QUESTIONS.length;
+function updateReport(){
+  const done=Object.keys(state.ans).length;
+  let right=0;
+  QUESTIONS.forEach(q=>{if(state.ans[q.id]===q.ans)right++;});
+  const wrong=done-right;
+  document.getElementById('rDone').textContent=done;
+  document.getElementById('rRight').textContent=right;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rPct').textContent='%'+(done?Math.round(right/done*100):0);
+  const bars=document.getElementById('reportBars'); bars.innerHTML='';
+  let bestC=null,worstC=null;
+  Object.entries(CATS).forEach(([k,c])=>{
+    const qs=QUESTIONS.filter(q=>q.cat===k);
+    const d=qs.filter(q=>state.ans[q.id]!==undefined).length;
+    const r=qs.filter(q=>state.ans[q.id]===q.ans).length;
+    const pct=d?Math.round(r/d*100):0;
+    if(d>0){ if(bestC===null||pct>bestC.p)bestC={p:pct,n:c.name,d:d,r:r}; if(worstC===null||pct<worstC.p)worstC={p:pct,n:c.name,d:d,r:r}; }
+    const row=el('div','catbar'); row.style.setProperty('--c',c.color);
+    row.innerHTML=`<div class="nm">${c.name}<span>${c.en}</span></div>
+      <div class="track"><div class="fill" style="width:${pct}%"></div></div>
+      <div class="sc">${d?r+' / '+d:'— / '+qs.length}</div>`;
+    bars.append(row);
+  });
+  const msg=document.getElementById('reportMsg');
+  if(!done){msg.textContent='Henüz veri yok — denemenin ilk sorusuyla başlayın.';}
+  else if(done<TOTAL){msg.innerHTML=`<b>${done}/${TOTAL}</b> soru çözüldü. Kalan ${TOTAL-done} soru tamamlanınca karnen kesinleşecek — şimdilik en güçlü alanın: <b>${bestC.n}</b> (%${bestC.p}).`;}
+  else{msg.innerHTML=`Deneme tamam! Doğru: <b>${right}/${TOTAL}</b> · Başarı: <b>%${Math.round(right/TOTAL*100)}</b>. En güçlü alanın <b>${bestC.n}</b> (%${bestC.p}), çalışman gereken alan <b>${worstC.n}</b> (%${worstC.p}). Ders bölümünde o kategorinin "Tuzak Alanı" kutusunu yeniden oku, İşlev Lab\u2019ı bir tur at, sonra karneni sıfırlayıp tekrar dene.`;}
+}
+updateReport();
+
+/* Sıfırlama */
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  document.getElementById('confirmBox').classList.add('show');
+});
+document.getElementById('confirmNo').addEventListener('click',()=>{
+  document.getElementById('confirmBox').classList.remove('show');
+});
+document.getElementById('confirmYes').addEventListener('click',()=>{
+  state.ans={}; save();
+  QUESTIONS.forEach(q=>{
+    const card=document.getElementById('q'+q.id);
+    card.classList.remove('answered');
+    card.querySelectorAll('.opt').forEach(b=>{b.classList.remove('correct','wrongpick'); b.querySelector('.mk').innerHTML='';});
+    const fb=card.querySelector('.fb'); fb.classList.remove('show'); fb.innerHTML='';
+  });
+  document.querySelectorAll('.dl.evid,.fact.evid').forEach(s=>s.classList.remove('evid'));
+  document.querySelectorAll('.evbtn').forEach(b=>{b.dataset.on=''; if(b.dataset.orig)b.textContent=b.dataset.orig;});
+  document.getElementById('confirmBox').classList.remove('show');
+  updateReport();
+  for(let i=0;i<DLGS.length;i++)updateTabs(i);
+  toast('Karne sıfırlandı — taze başlangıçlar');
+  document.getElementById('deneme').scrollIntoView({behavior:'smooth'});
+});
+
+/* ════════════════════════════════════════════════════════════
+   §05 ÇALIŞMA KÂĞIDI
+   ════════════════════════════════════════════════════════════ */
+(function(){
+  const doc=document.getElementById('wsDoc');
+
+  /* 1) Cevap tablosu: 3 satır × 8 */
+  const ansT=document.getElementById('wsAns');
+  for(let g=0;g<3;g++){
+    const qs=QUESTIONS.slice(g*8,g*8+8);
+    const tr1=el('tr'),tr2=el('tr');
+    qs.forEach(q=>{
+      tr1.append(el('th',null,q.id));
+      const td=el('td');
+      for(const L of 'ABCDE'){td.append(el('span','bub',L));}
+      tr2.append(td);
+    });
+    ansT.append(tr1,tr2);
+  }
+
+  /* 2) Bölüm A: her diyalog ayrı sayfa */
+  DLGS.forEach((D,di)=>{
+    const pas=el('div','ws-pas');
+    let bi=0;
+    const linesHtml=D.lines.map(l=>{
+      const t=esc(l.t).replace(/----/g,()=>{const s=bi===0?'\u2460':'\u2461'; bi++; return `<b class="ws-bl">${s} ----</b>`;});
+      return `<p><span class="spw">${esc(l.sp)}:</span> ${t}</p>`;
+    }).join('');
+    pas.innerHTML=`<div class="ws-ph"><span class="ws-pno">DİYALOG ${di+1}</span><h3>${esc(D.title)}</h3><span class="ws-pm">${esc(D.meta)}</span></div>
+      <p class="ws-note-line">Sorular ${D.blanks[0]}–${D.blanks[1]} bu karşılıklı konuşmaya göredir.</p>
+      <div class="ws-pt">${linesHtml}</div>`;
+    D.blanks.forEach(qid=>{
+      const q=QUESTIONS.find(x=>x.id===qid);
+      pas.append(el('div','ws-q',
+        `<p class="ws-qq"><b>${q.id}.</b> ${q.stem}</p>
+         <ul class="ws-oo">${q.opts.map((o,i)=>`<li><span class="k">${'ABCDE'[i]})</span><span>${esc(o[0])}</span></li>`).join('')}</ul>`));
+    });
+    doc.append(pas);
+  });
+
+  /* 3) Bölüm B: durum soruları */
+  const partb=el('div','ws-partb');
+  partb.innerHTML=`<div class="ws-ph"><span class="ws-pno">BÖLÜM B</span><h3>Situation Questions</h3><span class="ws-pm">Sorular 13–24 · numaralı olguların tamamı kısıttır</span></div>`;
+  QUESTIONS.filter(q=>q.part==='B').forEach(q=>{
+    const romans=['I','II','III'];
+    const facts=q.facts.map((f,j)=>`(${romans[j]}) ${esc(f)}`).join(' ');
+    partb.append(el('div','ws-q',
+      `<p class="ws-qq"><b>${q.id}.</b> <i>Situation:</i> ${facts} ${q.stem}</p>
+       <ul class="ws-oo">${q.opts.map((o,i)=>`<li><span class="k">${'ABCDE'[i]})</span><span>${esc(o[0])}</span></li>`).join('')}</ul>`));
+  });
+  doc.append(partb);
+
+  /* 4) Öğretmen anahtarı */
+  const ksumRows=Object.entries(CATS).map(([k,c])=>{
+    const qs=QUESTIONS.filter(q=>q.cat===k);
+    return `<tr><td>${c.name}</td><td>${qs.length}</td><td>${qs.map(q=>q.id).join(', ')}</td></tr>`;
+  }).join('');
+  const kqs=QUESTIONS.map(q=>{
+    const c=CATS[q.cat];
+    const ev=q.ev.map(id=>{
+      const s=SENT[id];
+      return (s.sp?esc(s.sp)+': ':'')+'\u201C'+esc(s.text)+'\u201D';
+    }).join(' ');
+    return `<div class="ws-kq" style="--c:${c.color}">
+      <p class="ws-kqh"><b>${q.id} — DOĞRU CEVAP: ${'ABCDE'[q.ans]}</b><span>${c.name}</span></p>
+      <p class="ws-kw">${esc(q.why)}</p>
+      <p class="ws-ke"><b>Kanıt:</b> ${ev}</p>
+      <p class="ws-ks"><b>Strateji:</b> ${esc(q.strat)}</p>
+    </div>`;
+  }).join('');
+  const key=el('div','ws-key');
+  key.innerHTML=`
+    <div class="ws-kh">
+      <b>Cevap Anahtarı · Öğretmen Nüshası</b>
+      <span>Bu sayfaları öğrenciye dağıtmadan önce ayırınız</span>
+    </div>
+    <div class="ws-kgrid">
+      ${QUESTIONS.map(q=>`<div class="kg"><span>${q.id}</span><b>${'ABCDE'[q.ans]}</b></div>`).join('')}
+    </div>
+    <table class="ws-ksum">
+      <thead><tr><th>Beceri Kategorisi</th><th>Soru Sayısı</th><th>Soru Numaraları</th></tr></thead>
+      <tbody>${ksumRows}</tbody>
+    </table>
+    <p class="ws-kfoot">Şık dağılımı dengelidir: A×5 · B×5 · C×4 · D×5 · E×5 (24 soru). Diyalog ve durum soruları, Opa Fluent\u2019in ÖSYM tarzındaki formatına uygun olarak bu sayfa için özgün yazılmıştır.</p>
+    <div>${kqs}</div>`;
+  doc.append(key);
+})();
+
+/* Kâğıt araç çubuğu */
+(function(){
+  const bPrint=document.getElementById('wsPrint');
+  const bKey=document.getElementById('wsKeyBtn');
+  const bPKey=document.getElementById('wsPrintKey');
+  function apply(){
+    document.body.classList.toggle('hidekey',!state.wskey);
+    bKey.textContent=state.wskey?'Anahtarı kapat':'Anahtarı göster';
+  }
+  bPrint.addEventListener('click',()=>window.print());
+  bKey.addEventListener('click',()=>{
+    state.wskey=!state.wskey; save(); apply();
+    toast(state.wskey?'Anahtar açık — yazdırmada dahil edilir':'Anahtar kapalı — yazdırmada çıkmaz');
+  });
+  bPKey.addEventListener('click',()=>{
+    document.body.classList.add('onlykey');
+    window.print();
+  });
+  window.addEventListener('afterprint',()=>document.body.classList.remove('onlykey'));
+  apply();
+})();
+
+/* ════════════════════════════════════════════════════════════
+   GÖRSEL CANLILIK
+   ════════════════════════════════════════════════════════════ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(n=>io.observe(n));
+
+const secIo=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('#topnav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));
+    }
+  });
+},{rootMargin:'-40% 0px -55% 0px'});
+['dersler','fnlab','deneme','karne','calisma'].forEach(id=>secIo.observe(document.getElementById(id)));
+</script>
+</body>
+</html>
